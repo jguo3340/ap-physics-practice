@@ -6,6 +6,7 @@
 // built into the page ahead of time; src/scripts/practice.ts runs the rest.
 import 'katex/dist/katex.min.css';
 import { render } from 'astro:content';
+import Calculator from './Calculator.astro';
 import ThemeToggle from './ThemeToggle.astro';
 import { letters, mathHtml, type PreparedQuestion } from '../lib/questions';
 import { examFormat, type Unit } from '../data/units';
@@ -51,6 +52,13 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
         <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
         Check as I go
       </button>
+      <button type="button" class="tool" aria-controls="calculator" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="5" y="3" width="14" height="18" rx="2" />
+          <path d="M8 7h8M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01M8.5 15h.01M12 15h.01M15.5 15h.01M8.5 18h.01M12 18h.01M15.5 18h.01" />
+        </svg>
+        <span class="tool-label">Calculator</span>
+      </button>
       {
         unit.equations && (
           <button type="button" class="tool" data-toggle="equations" aria-expanded="false" aria-controls="equations">
@@ -82,7 +90,8 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
     </p>
     <p>
       Turn on <strong>Check as I go</strong> to see the worked solution after each question. Otherwise your score
-      and every solution appear when you finish.
+      and every solution appear when you finish. The <strong>Calculator</strong> works in degrees or radians, and you
+      can drag it out of the way.
     </p>
     <p class="fine-print">
       AP® is a registered trademark of the College Board, which is not affiliated with this site. All practice
@@ -256,6 +265,8 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
       <button type="button" class="button button-primary" data-next>Next</button>
     </div>
   </footer>
+
+  <Calculator />
 </div>
 
 <script>

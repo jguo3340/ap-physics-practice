@@ -1,0 +1,377 @@
+---
+// A scientific calculator that floats over the page, for the kind of math the
+// exam needs: trig in degrees or radians, roots, powers, logs, and scientific
+// notation. Open it with any button that has aria-controls="calculator".
+// The math lives in src/lib/calculate.ts; src/scripts/calculator.ts runs the panel.
+
+type Kind = 'fn' | 'num' | 'op' | 'action' | 'equals';
+interface Key {
+  label: string;
+  /** Text added to the expression; leave out for keys that do something else */
+  insert?: string;
+  action?: 'back' | 'clear' | 'equals';
+  /** Read aloud instead of the label when the label is a symbol */
+  name?: string;
+  kind: Kind;
+}
+
+const keys: Key[] = [
+  { label: 'sin', insert: 'sin(', kind: 'fn' },
+  { label: 'cos', insert: 'cos(', kind: 'fn' },
+  { label: 'tan', insert: 'tan(', kind: 'fn' },
+  { label: '(', insert: '(', name: 'open bracket', kind: 'fn' },
+  { label: ')', insert: ')', name: 'close bracket', kind: 'fn' },
+  { label: 'sin⁻¹', insert: 'sin⁻¹(', name: 'inverse sine', kind: 'fn' },
+  { label: 'cos⁻¹', insert: 'cos⁻¹(', name: 'inverse cosine', kind: 'fn' },
+  { label: 'tan⁻¹', insert: 'tan⁻¹(', name: 'inverse tangent', kind: 'fn' },
+  { label: 'x²', insert: '^2', name: 'squared', kind: 'fn' },
+  { label: 'xʸ', insert: '^', name: 'to the power of', kind: 'fn' },
+  { label: '√', insert: '√(', name: 'square root', kind: 'fn' },
+  { label: 'π', insert: 'π', name: 'pi', kind: 'fn' },
+  { label: 'ln', insert: 'ln(', name: 'natural log', kind: 'fn' },
+  { label: 'log', insert: 'log(', name: 'log base 10', kind: 'fn' },
+  { label: '×10ⁿ', insert: 'E', name: 'times ten to the power of', kind: 'fn' },
+  { label: '7', insert: '7', kind: 'num' },
+  { label: '8', insert: '8', kind: 'num' },
+  { label: '9', insert: '9', kind: 'num' },
+  { label: '÷', insert: '÷', name: 'divide', kind: 'op' },
+  { label: '⌫', action: 'back', name: 'delete', kind: 'action' },
+  { label: '4', insert: '4', kind: 'num' },
+  { label: '5', insert: '5', kind: 'num' },
+  { label: '6', insert: '6', kind: 'num' },
+  { label: '×', insert: '×', name: 'times', kind: 'op' },
+  { label: 'AC', action: 'clear', name: 'clear', kind: 'action' },
+  { label: '1', insert: '1', kind: 'num' },
+  { label: '2', insert: '2', kind: 'num' },
+  { label: '3', insert: '3', kind: 'num' },
+  { label: '−', insert: '−', name: 'minus', kind: 'op' },
+  { label: 'ans', insert: 'ans', name: 'last answer', kind: 'op' },
+  { label: '0', insert: '0', kind: 'num' },
+  { label: '.', insert: '.', name: 'decimal point', kind: 'num' },
+  { label: 'e', insert: 'e', name: 'e, 2.718', kind: 'fn' },
+  { label: '+', insert: '+', name: 'plus', kind: 'op' },
+  { label: '=', action: 'equals', name: 'equals', kind: 'equals' },
+];
+---
+
+<section class="calc" id="calculator" data-calc aria-labelledby="calc-title" hidden>
+  <div class="calc-head" data-calc-drag>
+    <h2 id="calc-title">Calculator</h2>
+    <div class="angle" role="group" aria-label="Angle unit">
+      <button type="button" data-angle="deg" aria-pressed="true">DEG</button>
+      <button type="button" data-angle="rad" aria-pressed="false">RAD</button>
+    </div>
+    <button type="button" class="calc-close" data-calc-close aria-label="Close calculator">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+    </button>
+  </div>
+
+  <ol class="calc-history" data-calc-history aria-label="Past calculations"></ol>
+
+  <div class="calc-entry">
+    <label class="sr-only" for="calc-input">Expression</label>
+    <input
+      id="calc-input"
+      class="calc-input"
+      data-calc-input
+      type="text"
+      autocomplete="off"
+      autocapitalize="off"
+      spellcheck="false"
+      placeholder="e.g. 9.8 sin(30)"
+    />
+    <output class="calc-preview" data-calc-preview for="calc-input" aria-live="polite"></output>
+  </div>
+
+  <div class="calc-keys">
+    {
+      keys.map((key) => (
+        <button
+          type="button"
+          class={`key key-${key.kind}`}
+          data-insert={key.insert}
+          data-action={key.action}
+          aria-label={key.name}
+        >
+          {key.label}
+        </button>
+      ))
+    }
+  </div>
+</section>
+
+<script>
+  import { setUpCalculator } from '../scripts/calculator';
+
+  const panel = document.querySelector<HTMLElement>('[data-calc]');
+  if (panel) setUpCalculator(panel);
+</script>
+
+<style>
+  .calc {
+    position: fixed;
+    top: 96px;
+    right: max(24px, env(safe-area-inset-right, 0px));
+    z-index: 8;
+    display: grid;
+    gap: 10px;
+    width: 340px;
+    padding: 0 14px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+  }
+
+  .calc-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 -14px;
+    padding: 6px 6px 6px 14px;
+    border-bottom: 1px solid var(--border);
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+  }
+
+  .calc.is-dragging .calc-head {
+    cursor: grabbing;
+  }
+
+  .calc-head h2 {
+    flex: 1;
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    letter-spacing: 0;
+  }
+
+  .angle {
+    display: flex;
+    padding: 2px;
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    background: var(--surface-2);
+  }
+
+  .angle button {
+    min-height: 30px;
+    padding: 0 10px;
+    border: 0;
+    border-radius: 99px;
+    background: none;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .angle button[aria-pressed='true'] {
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.15);
+  }
+
+  .calc-close {
+    display: inline-grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 50%;
+    background: none;
+    color: var(--text);
+    cursor: pointer;
+  }
+
+  .calc-close svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+  }
+
+  .calc-history {
+    display: grid;
+    gap: 2px;
+    max-height: 132px;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    list-style: none;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+  }
+
+  .calc-history:empty {
+    display: none;
+  }
+
+  .calc-history :global(li) {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 4px 2px;
+    border-bottom: 1px dashed var(--border);
+  }
+
+  .calc-history :global(.past-expr) {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    color: var(--text-muted);
+  }
+
+  .calc-history :global(button) {
+    flex-shrink: 0;
+    padding: 2px 6px;
+    border: 0;
+    border-radius: 6px;
+    background: none;
+    color: var(--accent);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .calc-history :global(button:hover) {
+    background: var(--accent-soft);
+  }
+
+  .calc-entry {
+    display: grid;
+    gap: 2px;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+  }
+
+  .calc-entry:focus-within {
+    border-color: var(--accent);
+  }
+
+  .calc-input {
+    width: 100%;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    outline: none;
+    background: none;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 1.15rem;
+  }
+
+  .calc-input::placeholder {
+    color: var(--text-muted);
+    opacity: 0.8;
+  }
+
+  .calc-preview {
+    min-height: 1.4em;
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    text-align: right;
+    color: var(--text-muted);
+    overflow-wrap: anywhere;
+  }
+
+  .calc-preview.is-error {
+    color: var(--highlight);
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+  }
+
+  .calc-keys {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .key {
+    min-height: 44px;
+    padding: 0 2px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  .key:hover {
+    border-color: var(--accent);
+  }
+
+  .key:active {
+    transform: translateY(1px);
+  }
+
+  .key-num {
+    background: var(--surface);
+    font-family: var(--font-mono);
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+
+  .key-op {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .key-op[data-insert='ans'] {
+    font-size: 0.9rem;
+  }
+
+  .key-action {
+    color: var(--highlight);
+    font-weight: 700;
+  }
+
+  .key-equals {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--accent-text);
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+
+  .key-equals:hover {
+    background: var(--accent-hover);
+  }
+
+  /* Phones: the calculator becomes a sheet along the bottom of the screen. */
+  @media (max-width: 640px) {
+    .calc {
+      top: auto;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: auto;
+      max-height: 85vh;
+      max-height: 85dvh;
+      overflow-y: auto;
+      padding: 0 max(12px, env(safe-area-inset-right, 0px)) calc(12px + env(safe-area-inset-bottom, 0px))
+        max(12px, env(safe-area-inset-left, 0px));
+      border-radius: var(--radius) var(--radius) 0 0;
+      border-bottom: 0;
+    }
+
+    .calc-head {
+      margin: 0 calc(-1 * max(12px, env(safe-area-inset-left, 0px)));
+      cursor: default;
+    }
+
+    .calc-history {
+      max-height: 84px;
+    }
+  }
+</style>
