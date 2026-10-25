@@ -1,204 +1,140 @@
 ---
+// The home page is a single screen: no scrolling and no unit list. Students
+// start from the buttons, which lead to the units page.
 import BaseLayout from '../layouts/BaseLayout.astro';
-import UnitCard from '../components/UnitCard.astro';
+import ForceDiagram from '../components/ForceDiagram.astro';
 import { units, examFormat } from '../data/units';
 import { url } from '../site';
 
-const features = [
-  {
-    title: 'Practice one unit at a time',
-    text: 'Pick a unit, or a single topic inside it, and work only on that. Good for homework weeks and for patching weak spots before the exam.',
-  },
-  {
-    title: 'An explanation for every answer',
-    text: 'Each question says why the right choice is right and why the tempting wrong ones are wrong, so a miss still teaches you something.',
-  },
-  {
-    title: 'Cheat sheets and visuals',
-    text: 'Each unit has its key ideas, the equations you need, and diagrams like free-body force models, all on one page.',
-  },
-];
+const multipleChoice = examFormat[0];
 ---
 
-<BaseLayout>
-  <section class="hero">
-    <div class="container hero-inner">
-      <div class="hero-text">
-        <p class="eyebrow">AP Physics 1</p>
-        <h1>Multiple-choice practice, organized by unit.</h1>
-        <p class="lead muted">
-          Past free-response questions are easy to find, but multiple-choice practice isn't. Work
-          through AP-style questions for each unit and read why every answer is right.
-        </p>
-        <div class="actions">
-          <a class="button button-primary" href={url('/units')}>Browse the units</a>
-          <a class="button button-secondary" href={url(`/units/${units[0].slug}`)}>Start with Unit 1</a>
-        </div>
+<BaseLayout oneScreen>
+  <div class="container hero">
+    <div class="hero-text">
+      <span class="eyebrow">AP Physics 1 · Multiple choice</span>
+      <h1>Practice the part of the exam <em>nobody posts.</em></h1>
+      <p class="lede">
+        AP-style multiple-choice questions for all {units.length} units, a worked explanation for every
+        answer, and a cheat sheet with the key equations and diagrams for each unit.
+      </p>
+      <div class="actions">
+        <a class="button button-primary" href={url('/units')}>Start practicing →</a>
+        <a class="button button-secondary" href={url('/units')}>Browse the units</a>
       </div>
-
-      <aside class="exam card" aria-labelledby="exam-heading">
-        <h2 id="exam-heading">The exam at a glance</h2>
-        <ul>
-          {
-            examFormat.map((part) => (
-              <li>
-                <div class="exam-row">
-                  <strong>{part.kind}</strong>
-                  <span class="exam-weight">{part.weight}%</span>
-                </div>
-                <span class="muted">
-                  {part.section} · {part.questions} questions · {part.minutes} minutes
-                </span>
-              </li>
-            ))
-          }
-        </ul>
-        <p class="exam-note muted">
-          This site focuses on Section I, where practice material is hardest to come by.
-        </p>
-      </aside>
+      <dl class="facts">
+        <div><dt>{units.length}</dt><dd>units</dd></div>
+        <div><dt>{multipleChoice.questions}</dt><dd>MCQs on the real exam</dd></div>
+        <div><dt>{multipleChoice.minutes} min</dt><dd>for Section I</dd></div>
+      </dl>
     </div>
-  </section>
-
-  <section class="section features-section">
-    <div class="container">
-      <div class="features">
-        {
-          features.map((feature) => (
-            <div class="feature">
-              <h3>{feature.title}</h3>
-              <p class="muted">{feature.text}</p>
-            </div>
-          ))
-        }
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container">
-      <div class="section-head">
-        <h2>Choose a unit</h2>
-        <p class="muted">The bars show how much of the multiple-choice section each unit makes up.</p>
-      </div>
-      <div class="unit-grid">
-        {units.map((unit) => <UnitCard unit={unit} />)}
-      </div>
-    </div>
-  </section>
+    <ForceDiagram />
+  </div>
 </BaseLayout>
 
 <style>
   .hero {
-    padding: 56px 0 40px;
-    background:
-      radial-gradient(circle at 85% 0%, var(--accent-soft), transparent 55%),
-      var(--bg);
-    border-bottom: 1px solid var(--border);
-  }
-
-  .hero-inner {
     display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: 40px;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 48px;
     align-items: center;
   }
 
-  .lead {
-    font-size: 1.12rem;
-    max-width: 36em;
+  .hero > * {
+    min-width: 0;
+  }
+
+  h1 {
+    font-size: clamp(2.1rem, 5.2vw, 4.1rem);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    margin: 0.25em 0 0.3em;
+  }
+
+  h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  .eyebrow {
+    margin-bottom: 0;
+  }
+
+  .lede {
+    font-size: clamp(1rem, 1.4vw, 1.125rem);
+    color: var(--text-muted);
+    max-width: 34em;
+    margin-bottom: 28px;
   }
 
   .actions {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
-    margin-top: 24px;
   }
 
-  .exam {
-    padding: 24px;
-  }
-
-  .exam h2 {
-    font-size: 1.1rem;
-    margin-bottom: 16px;
-  }
-
-  .exam ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: 14px;
-  }
-
-  .exam li {
-    display: grid;
-    gap: 2px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid var(--border);
-    font-size: 0.92rem;
-  }
-
-  .exam-row {
+  .facts {
     display: flex;
-    justify-content: space-between;
-    font-size: 1rem;
+    flex-wrap: wrap;
+    gap: 28px;
+    margin: 36px 0 0;
+    font-size: 0.875rem;
+    color: var(--text-muted);
   }
 
-  .exam-weight {
-    font-weight: 700;
-    color: var(--accent);
+  .facts dt {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.6rem;
+    line-height: 1.1;
+    color: var(--text);
   }
 
-  .exam-note {
-    margin: 14px 0 0;
-    font-size: 0.88rem;
-  }
-
-  .features-section {
-    padding-bottom: 8px;
-  }
-
-  .features {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-  }
-
-  .feature {
-    padding-left: 16px;
-    border-left: 3px solid var(--highlight);
-  }
-
-  .feature p {
-    margin: 0;
-    font-size: 0.95rem;
-  }
-
-  .section-head {
-    margin-bottom: 24px;
-  }
-
-  .section-head p {
+  .facts dd {
     margin: 0;
   }
 
-  .unit-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
-    gap: 16px;
+  /* Short desktop windows: drop the facts row so everything still fits. */
+  @media (min-width: 901px) and (max-height: 700px) {
+    .facts {
+      display: none;
+    }
   }
 
-  @media (max-width: 860px) {
-    .hero-inner,
-    .features {
+  @media (max-width: 900px) {
+    .hero {
       grid-template-columns: 1fr;
+      gap: 20px;
     }
 
+    .facts {
+      display: none;
+    }
+
+    .lede {
+      margin-bottom: 18px;
+    }
+  }
+
+  @media (max-width: 900px) and (max-height: 760px) {
     .hero {
-      padding-top: 40px;
+      gap: 14px;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      margin: 0.4em 0 0.35em;
+    }
+
+    .lede {
+      font-size: 0.94rem;
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+
+    .button {
+      padding: 0.65em 0.9em;
+      font-size: 0.875rem;
     }
   }
 </style>

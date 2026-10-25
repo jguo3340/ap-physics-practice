@@ -1,49 +1,56 @@
-/* Colors, spacing, and type live here as variables, so the whole site can be
-   restyled from one place. Dark mode swaps the color variables only. */
+/* Colors, fonts, and spacing live here as variables, so the whole site can be
+   restyled from one place. The site is light by default; the theme switch in
+   the header sets data-theme="dark" on <html>, which swaps the color variables. */
 
 :root {
-  --bg: #f7f8fb;
+  --bg: #ffffff;
   --surface: #ffffff;
-  --surface-2: #eef1f7;
-  --text: #141a2b;
-  --text-muted: #556079;
-  --border: #dde2ec;
-  --accent: #2448d8;
-  --accent-hover: #1a37b0;
-  --accent-soft: #e6ecff;
+  --surface-2: #f2f6fc;
+  --text: #10213f;
+  --text-muted: #56658a;
+  --border: #d9e1ee;
+  --accent: #1f5eff;
+  --accent-hover: #1749cc;
+  --accent-soft: #e8efff;
   --accent-text: #ffffff;
-  --highlight: #e8590c;
+  --highlight: #ff6413;
   --highlight-soft: #fff0e6;
+  --force-green: #0b9b6f;
+  /* graph-paper lines */
+  --grid: #edf2fa;
+  --grid-major: #dce5f3;
 
   --radius: 12px;
   --radius-sm: 8px;
-  --shadow: 0 1px 2px rgb(20 26 43 / 0.06), 0 4px 16px rgb(20 26 43 / 0.06);
-  --max-width: 1080px;
+  --shadow: 0 10px 40px rgb(16 33 63 / 0.08);
+  --max-width: 1160px;
   --gutter: 16px;
 
-  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --font-display: 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 
   color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0e121c;
-    --surface: #161b28;
-    --surface-2: #1e2534;
-    --text: #e8ecf5;
-    --text-muted: #9aa5bd;
-    --border: #2a3245;
-    --accent: #7d97ff;
-    --accent-hover: #a2b4ff;
-    --accent-soft: #1f2a4d;
-    --accent-text: #0e121c;
-    --highlight: #ff8a4c;
-    --highlight-soft: #3a2316;
-    --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 4px 16px rgb(0 0 0 / 0.25);
-    color-scheme: dark;
-  }
+:root[data-theme='dark'] {
+  --bg: #0d1526;
+  --surface: #111b30;
+  --surface-2: #17233d;
+  --text: #e6ecfa;
+  --text-muted: #93a2c3;
+  --border: #26345a;
+  --accent: #7aa2ff;
+  --accent-hover: #a3c0ff;
+  --accent-soft: #1b2a4f;
+  --accent-text: #0d1526;
+  --highlight: #ff8a4a;
+  --highlight-soft: #3a2316;
+  --force-green: #3fd3a0;
+  --grid: #131d33;
+  --grid-major: #1a2846;
+  --shadow: 0 10px 40px rgb(0 0 0 / 0.35);
+  color-scheme: dark;
 }
 
 *,
@@ -75,21 +82,26 @@ main {
 h1,
 h2,
 h3 {
-  line-height: 1.2;
-  letter-spacing: -0.015em;
+  font-family: var(--font-display);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
   margin: 0 0 0.5em;
+  text-wrap: balance;
 }
 
 h1 {
-  font-size: clamp(1.9rem, 4.5vw, 2.8rem);
+  font-size: clamp(2rem, 4.5vw, 3rem);
+  font-weight: 800;
 }
 
 h2 {
   font-size: clamp(1.35rem, 3vw, 1.7rem);
+  font-weight: 700;
 }
 
 h3 {
   font-size: 1.1rem;
+  font-weight: 700;
 }
 
 p {
@@ -125,27 +137,51 @@ a:hover {
   color: var(--text-muted);
 }
 
+/* Faint graph paper, like a physics notebook. */
+.graph-paper {
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(var(--grid-major) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:
+    120px 120px,
+    120px 120px,
+    24px 24px,
+    24px 24px;
+}
+
 .eyebrow {
-  font-size: 0.8rem;
-  font-weight: 700;
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--accent);
-  margin-bottom: 0.75em;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 10px;
+  margin-bottom: 1em;
 }
 
 .button {
   display: inline-flex;
   align-items: center;
   gap: 0.4em;
-  padding: 0.7em 1.2em;
-  border-radius: var(--radius-sm);
+  padding: 0.8em 1.35em;
+  border-radius: 10px;
   border: 1px solid transparent;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 1rem;
   text-decoration: none;
   line-height: 1.2;
-  transition: background-color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+  transition:
+    background-color 0.15s,
+    border-color 0.15s;
 }
 
 .button-primary {
@@ -173,7 +209,6 @@ a:hover {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  box-shadow: var(--shadow);
 }
 
 .unit-badge {
@@ -184,6 +219,7 @@ a:hover {
   border-radius: var(--radius-sm);
   background: var(--accent-soft);
   color: var(--accent);
+  font-family: var(--font-display);
   font-weight: 800;
   font-size: 1rem;
   flex-shrink: 0;
@@ -202,7 +238,10 @@ a:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
     transition: none !important;
   }
 }
