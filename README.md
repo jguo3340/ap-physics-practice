@@ -45,9 +45,12 @@ Common edits:
 
 ## Deploying
 
-The site is static, so it can be hosted free on Vercel, Netlify, or GitHub Pages. On Vercel, import this repository and keep the default Astro settings. Every push to `main` then updates the live site.
+The site is static, so it can be hosted free.
 
-To serve it from a sub-folder (GitHub Pages uses `https://<user>.github.io/<repo>/`), set the `BASE_PATH` environment variable to `/<repo>` when building.
+- **GitHub Pages (set up already):** `.github/workflows/deploy.yml` builds and publishes the site on every push to `main`. Turn it on once under the repo's **Settings → Pages → Source: GitHub Actions**. The site then lives at `https://<user>.github.io/<repo>/`.
+- **Vercel or Netlify:** import this repository and keep the default Astro settings.
+
+`BASE_PATH` tells the build which sub-folder the site is served from (GitHub Pages uses `/<repo>`); leave it unset for a site at the root of a domain.
 
 ## Roadmap
 
