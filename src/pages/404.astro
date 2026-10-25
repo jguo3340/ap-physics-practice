@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { url } from '../site';
+---
+
+<BaseLayout title="Page not found">
+  <section class="section">
+    <div class="container not-found">
+      <p class="eyebrow">404</p>
+      <h1>This page doesn't exist.</h1>
+      <p class="muted">The link may be old, or the address may have a typo.</p>
+      <a class="button button-primary" href={url('/units')}>Go to the units</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    max-width: 640px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+</style>

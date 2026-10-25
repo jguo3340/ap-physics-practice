@@ -1,0 +1,204 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import UnitCard from '../components/UnitCard.astro';
+import { units, examFormat } from '../data/units';
+import { url } from '../site';
+
+const features = [
+  {
+    title: 'Practice one unit at a time',
+    text: 'Pick a unit, or a single topic inside it, and work only on that. Good for homework weeks and for patching weak spots before the exam.',
+  },
+  {
+    title: 'An explanation for every answer',
+    text: 'Each question says why the right choice is right and why the tempting wrong ones are wrong, so a miss still teaches you something.',
+  },
+  {
+    title: 'Cheat sheets and visuals',
+    text: 'Each unit has its key ideas, the equations you need, and diagrams like free-body force models, all on one page.',
+  },
+];
+---
+
+<BaseLayout>
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-text">
+        <p class="eyebrow">AP Physics 1</p>
+        <h1>Multiple-choice practice, organized by unit.</h1>
+        <p class="lead muted">
+          Past free-response questions are easy to find, but multiple-choice practice isn't. Work
+          through AP-style questions for each unit and read why every answer is right.
+        </p>
+        <div class="actions">
+          <a class="button button-primary" href={url('/units')}>Browse the units</a>
+          <a class="button button-secondary" href={url(`/units/${units[0].slug}`)}>Start with Unit 1</a>
+        </div>
+      </div>
+
+      <aside class="exam card" aria-labelledby="exam-heading">
+        <h2 id="exam-heading">The exam at a glance</h2>
+        <ul>
+          {
+            examFormat.map((part) => (
+              <li>
+                <div class="exam-row">
+                  <strong>{part.kind}</strong>
+                  <span class="exam-weight">{part.weight}%</span>
+                </div>
+                <span class="muted">
+                  {part.section} · {part.questions} questions · {part.minutes} minutes
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="exam-note muted">
+          This site focuses on Section I, where practice material is hardest to come by.
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section features-section">
+    <div class="container">
+      <div class="features">
+        {
+          features.map((feature) => (
+            <div class="feature">
+              <h3>{feature.title}</h3>
+              <p class="muted">{feature.text}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2>Choose a unit</h2>
+        <p class="muted">The bars show how much of the multiple-choice section each unit makes up.</p>
+      </div>
+      <div class="unit-grid">
+        {units.map((unit) => <UnitCard unit={unit} />)}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding: 56px 0 40px;
+    background:
+      radial-gradient(circle at 85% 0%, var(--accent-soft), transparent 55%),
+      var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-inner {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+
+  .lead {
+    font-size: 1.12rem;
+    max-width: 36em;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .exam {
+    padding: 24px;
+  }
+
+  .exam h2 {
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+  }
+
+  .exam ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 14px;
+  }
+
+  .exam li {
+    display: grid;
+    gap: 2px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.92rem;
+  }
+
+  .exam-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1rem;
+  }
+
+  .exam-weight {
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .exam-note {
+    margin: 14px 0 0;
+    font-size: 0.88rem;
+  }
+
+  .features-section {
+    padding-bottom: 8px;
+  }
+
+  .features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .feature {
+    padding-left: 16px;
+    border-left: 3px solid var(--highlight);
+  }
+
+  .feature p {
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  .section-head {
+    margin-bottom: 24px;
+  }
+
+  .section-head p {
+    margin: 0;
+  }
+
+  .unit-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+    gap: 16px;
+  }
+
+  @media (max-width: 860px) {
+    .hero-inner,
+    .features {
+      grid-template-columns: 1fr;
+    }
+
+    .hero {
+      padding-top: 40px;
+    }
+  }
+</style>

@@ -1,0 +1,258 @@
+---
+// One page per unit. Astro builds all 8 pages ahead of time from units.ts.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import WeightBar from '../../components/WeightBar.astro';
+import { units, type Unit } from '../../data/units';
+import { url } from '../../site';
+
+export function getStaticPaths() {
+  return units.map((unit) => ({ params: { slug: unit.slug }, props: { unit } }));
+}
+
+interface Props {
+  unit: Unit;
+}
+
+const { unit } = Astro.props;
+const index = units.findIndex((u) => u.slug === unit.slug);
+const previous = units[index - 1];
+const next = units[index + 1];
+---
+
+<BaseLayout title={`Unit ${unit.number}: ${unit.title}`} description={unit.summary}>
+  <section class="unit-hero">
+    <div class="container">
+      <a class="back" href={url('/units')}>← All units</a>
+      <div class="title-row">
+        <span class="unit-badge big">{unit.number}</span>
+        <div>
+          <p class="eyebrow">Unit {unit.number}</p>
+          <h1>{unit.title}</h1>
+        </div>
+      </div>
+      <p class="lead muted">{unit.summary}</p>
+      <WeightBar weight={unit.examWeight} />
+
+      <nav class="jump" aria-label="On this page">
+        <a href="#practice">Practice</a>
+        <a href="#cheat-sheet">Cheat sheet</a>
+        <a href="#topics">Topics</a>
+      </nav>
+    </div>
+  </section>
+
+  <div class="container unit-body">
+    <section id="practice" class="panel card">
+      <h2>Practice questions</h2>
+      <p class="muted">
+        Practice for this unit is on the way. You'll be able to answer AP-style multiple-choice
+        questions for the whole unit or one topic at a time, with an explanation after each answer.
+      </p>
+      <span class="status">Coming soon</span>
+    </section>
+
+    <section id="cheat-sheet" class="panel card">
+      <h2>Cheat sheet</h2>
+      <p class="muted">
+        Key ideas, the equations you need, and diagrams for this unit, all on one page.
+      </p>
+      <span class="status">Coming soon</span>
+    </section>
+
+    <section id="topics" class="panel card">
+      <h2>Topics in this unit</h2>
+      <ol class="topics">
+        {
+          unit.topics.map((topic) => (
+            <li id={`topic-${topic.id.replace('.', '-')}`}>
+              <span class="topic-id">{topic.id}</span>
+              <span>{topic.title}</span>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <nav class="pager" aria-label="Other units">
+      {
+        previous ? (
+          <a class="pager-link" href={url(`/units/${previous.slug}`)}>
+            <span class="muted">← Unit {previous.number}</span>
+            <strong>{previous.title}</strong>
+          </a>
+        ) : (
+          <span />
+        )
+      }
+      {
+        next && (
+          <a class="pager-link next" href={url(`/units/${next.slug}`)}>
+            <span class="muted">Unit {next.number} →</span>
+            <strong>{next.title}</strong>
+          </a>
+        )
+      }
+    </nav>
+  </div>
+</BaseLayout>
+
+<style>
+  .unit-hero {
+    padding: 32px 0 28px;
+    border-bottom: 1px solid var(--border);
+    background:
+      radial-gradient(circle at 90% 0%, var(--accent-soft), transparent 50%),
+      var(--bg);
+  }
+
+  .back {
+    display: inline-block;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .title-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 8px;
+  }
+
+  .title-row .eyebrow {
+    margin-bottom: 0.25em;
+  }
+
+  .title-row h1 {
+    margin: 0;
+  }
+
+  .unit-badge.big {
+    width: 3.25rem;
+    height: 3.25rem;
+    font-size: 1.5rem;
+    border-radius: var(--radius);
+  }
+
+  .lead {
+    font-size: 1.08rem;
+    max-width: 40em;
+  }
+
+  .jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 24px;
+  }
+
+  .jump a {
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    background: var(--surface);
+    color: var(--text);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .jump a:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .unit-body {
+    display: grid;
+    gap: 16px;
+    padding-top: 32px;
+    padding-bottom: 48px;
+  }
+
+  .panel {
+    padding: 24px;
+    scroll-margin-top: 76px;
+  }
+
+  .panel p {
+    max-width: 44em;
+  }
+
+  .status {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 99px;
+    background: var(--highlight-soft);
+    color: var(--highlight);
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  .topics {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .topics li {
+    display: flex;
+    gap: 14px;
+    padding: 12px 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .topics li:first-child {
+    border-top: 0;
+    padding-top: 4px;
+  }
+
+  .topic-id {
+    min-width: 2.5em;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .pager {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 8px;
+  }
+
+  .pager-link {
+    display: grid;
+    gap: 2px;
+    padding: 16px 20px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .pager-link:hover {
+    border-color: var(--accent);
+    color: var(--text);
+  }
+
+  .pager-link span {
+    font-size: 0.85rem;
+  }
+
+  .pager-link.next {
+    text-align: right;
+    grid-column: 2;
+  }
+
+  @media (max-width: 600px) {
+    .pager {
+      grid-template-columns: 1fr;
+    }
+
+    .pager-link.next {
+      grid-column: 1;
+    }
+  }
+</style>
