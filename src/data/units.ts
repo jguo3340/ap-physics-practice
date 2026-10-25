@@ -8,6 +8,13 @@ export interface Topic {
   title: string;
 }
 
+export interface Equation {
+  /** KaTeX source, e.g. "v_x = v_{x0} + a_x t" */
+  tex: string;
+  /** What the equation is for, in a few words */
+  label: string;
+}
+
 export interface Unit {
   number: number;
   /** Used in the page address, e.g. /units/kinematics */
@@ -18,6 +25,8 @@ export interface Unit {
   /** Share of the multiple-choice section, in percent: [low, high] */
   examWeight: [number, number];
   topics: Topic[];
+  /** Shown in the equation sheet on the practice page */
+  equations?: Equation[];
 }
 
 export const units: Unit[] = [
@@ -34,6 +43,14 @@ export const units: Unit[] = [
       { id: '1.3', title: 'Representing Motion' },
       { id: '1.4', title: 'Reference Frames and Relative Motion' },
       { id: '1.5', title: 'Vectors and Motion in Two Dimensions' },
+    ],
+    equations: [
+      { label: 'Average velocity', tex: '\\bar v_x = \\dfrac{\\Delta x}{\\Delta t}' },
+      { label: 'Average acceleration', tex: '\\bar a_x = \\dfrac{\\Delta v_x}{\\Delta t}' },
+      { label: 'Velocity, constant acceleration', tex: 'v_x = v_{x0} + a_x t' },
+      { label: 'Position, constant acceleration', tex: 'x = x_0 + v_{x0} t + \\tfrac12 a_x t^2' },
+      { label: 'Velocity and position', tex: 'v_x^2 = v_{x0}^2 + 2 a_x (x - x_0)' },
+      { label: 'Free fall near Earth', tex: 'g = 9.8\\ \\text{m/s}^2' },
     ],
   },
   {

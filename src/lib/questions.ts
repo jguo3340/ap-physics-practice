@@ -44,6 +44,11 @@ function inline(text: string) {
     .join('');
 }
 
+/** One equation as HTML, e.g. for the equation sheet. */
+export function mathHtml(tex: string) {
+  return katex.renderToString(tex, { throwOnError: true });
+}
+
 /** Like inline(), but a blank line starts a new paragraph. */
 function paragraphs(text: string) {
   return text

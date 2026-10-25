@@ -27,15 +27,17 @@ Other commands:
 src/
 ├── content/questions/    The question bank: one Markdown file per question
 ├── content.config.ts     The checklist every question file must pass
-├── lib/questions.ts      Loads questions for the quiz; catches duplicates
+├── lib/questions.ts      Loads questions for practice; catches duplicates
+├── scripts/practice.ts   Runs the practice page: timer, marks, cross-outs, score
 ├── data/units.ts         The 8 units: titles, summaries, exam weights, topics
 ├── site.ts               Site name and description
 ├── layouts/BaseLayout    Header, navigation, and footer shared by every page
-├── components/           Reusable pieces (the quiz, exam weight bars, logo)
+├── components/           Reusable pieces (the practice page, exam weight bars, logo)
 ├── pages/                One file per page; the file path becomes the web address
 │   ├── index.astro           Home page  →  /
 │   ├── units/index.astro     All units  →  /units
-│   └── units/[slug].astro    One page per unit  →  /units/kinematics, ...
+│   ├── units/[slug].astro    One page per unit  →  /units/kinematics, ...
+│   └── units/[slug]/practice.astro   Exam-style practice  →  /units/kinematics/practice
 └── styles/global.css     Colors, fonts, and spacing for the whole site
 public/                   Files served as-is (the favicon)
 ```
@@ -69,7 +71,7 @@ The site is static, so it can be hosted free.
 ## Roadmap
 
 1. Site skeleton: home, unit list, and unit pages (done)
-2. Practice engine: questions stored as files, instant feedback, explanations, equations with KaTeX (started: Unit 1 has five sample questions)
+2. Practice engine: questions stored as files, instant feedback, explanations, equations with KaTeX (started: Unit 1 has an exam-style practice page with five sample questions)
 3. Content: a cheat sheet for each unit and original questions, starting with Units 1 and 2
 4. Visuals: interactive force diagrams and motion graphs
 5. Later: progress tracking

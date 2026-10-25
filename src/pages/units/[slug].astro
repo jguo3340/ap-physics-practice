@@ -2,8 +2,7 @@
 // One page per unit. Astro builds all 8 pages ahead of time from units.ts.
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import WeightBar from '../../components/WeightBar.astro';
-import Quiz from '../../components/Quiz.astro';
-import { units, type Unit } from '../../data/units';
+import { examFormat, units, type Unit } from '../../data/units';
 import { getUnitQuestions } from '../../lib/questions';
 import { url } from '../../site';
 
@@ -20,6 +19,9 @@ const index = units.findIndex((u) => u.slug === unit.slug);
 const previous = units[index - 1];
 const next = units[index + 1];
 const questions = await getUnitQuestions(unit.number);
+const practiceUrl = url(`/units/${unit.slug}/practice`);
+const practiceTopics = unit.topics.filter((t) => questions.some((q) => q.topic === t.id));
+const minutes = Math.max(1, Math.round((questions.length * examFormat[0].minutes) / examFormat[0].questions));
 ---
 
 <BaseLayout title={`Unit ${unit.number}: ${unit.title}`} description={unit.summary}>
@@ -48,10 +50,40 @@ const questions = await getUnitQuestions(unit.number);
         questions.length > 0 ? (
           <>
             <p class="muted">
-              One question at a time. After each answer you'll see the worked solution and why each
-              wrong choice is wrong.
+              Exam-style multiple choice for this unit, on its own page, with a timer and a worked solution for
+              every question.
             </p>
-            <Quiz questions={questions} topics={unit.topics} />
+            <dl class="practice-stats">
+              <div>
+                <dt>{questions.length}</dt>
+                <dd>questions</dd>
+              </div>
+              <div>
+                <dt>
+                  {practiceTopics.length} of {unit.topics.length}
+                </dt>
+                <dd>topics covered</dd>
+              </div>
+              <div>
+                <dt>~{minutes} min</dt>
+                <dd>at exam pace</dd>
+              </div>
+            </dl>
+            <a class="button button-primary" href={practiceUrl}>
+              Start practice →
+            </a>
+            <div class="topic-links">
+              <span class="muted">Or practice one topic:</span>
+              <ul>
+                {practiceTopics.map((t) => (
+                  <li>
+                    <a href={`${practiceUrl}#topic-${t.id}`}>
+                      <span class="topic-id">{t.id}</span> {t.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </>
         ) : (
           <>
@@ -186,6 +218,63 @@ const questions = await getUnitQuestions(unit.number);
 
   .panel p {
     max-width: 44em;
+  }
+
+  .practice-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 32px;
+    margin: 4px 0 20px;
+  }
+
+  .practice-stats dt {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.5rem;
+    line-height: 1.1;
+  }
+
+  .practice-stats dd {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
+
+  .topic-links {
+    display: grid;
+    gap: 8px;
+    margin-top: 20px;
+    font-size: 0.9rem;
+  }
+
+  .topic-links ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .topic-links a {
+    display: inline-flex;
+    gap: 8px;
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    background: var(--surface);
+    color: var(--text);
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .topic-links a:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .topic-links .topic-id {
+    min-width: 0;
   }
 
   .status {

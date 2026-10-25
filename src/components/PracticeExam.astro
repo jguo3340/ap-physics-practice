@@ -1,0 +1,1307 @@
+---
+// The practice page, laid out like the multiple-choice section of the exam:
+// a timer, mark for review, crossing out choices, a question menu, and an
+// equation sheet. With "Check as I go" on, each answer can be checked right
+// away; otherwise the score and solutions come at the end. Every question is
+// built into the page ahead of time; src/scripts/practice.ts runs the rest.
+import 'katex/dist/katex.min.css';
+import { render } from 'astro:content';
+import ThemeToggle from './ThemeToggle.astro';
+import { letters, mathHtml, type PreparedQuestion } from '../lib/questions';
+import { examFormat, type Unit } from '../data/units';
+import { url } from '../site';
+
+interface Props {
+  unit: Unit;
+  questions: PreparedQuestion[];
+}
+
+const { unit, questions } = Astro.props;
+const multipleChoice = examFormat[0];
+const secondsPerQuestion = (multipleChoice.minutes * 60) / multipleChoice.questions;
+const unitUrl = url(`/units/${unit.slug}`);
+const items = await Promise.all(
+  questions.map(async (q) => ({ ...q, Content: (await render(q.entry)).Content })),
+);
+const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t.title}`]));
+---
+
+<div class="exam" data-exam data-pace={secondsPerQuestion} data-topics={JSON.stringify(topicNames)}>
+  <header class="exam-header">
+    <div class="exam-title">
+      <strong>Unit {unit.number}: {unit.title}</strong>
+      <span class="deck-line">
+        <span data-deck-label>All topics</span>
+        <a href="#all" data-all-link hidden>Practice all topics</a>
+      </span>
+      <button type="button" class="link-button" data-toggle="directions" aria-expanded="false" aria-controls="directions">
+        Directions
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+      </button>
+    </div>
+
+    <div class="timer">
+      <span class="clock" data-clock role="timer" aria-label="Time left">--:--</span>
+      <span class="time-up" data-time-up hidden>Time's up</span>
+      <button type="button" class="pill-button" data-timer-toggle aria-pressed="false">Hide timer</button>
+    </div>
+
+    <div class="tools">
+      <button type="button" class="switch" role="switch" aria-checked="false" data-check-switch>
+        <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
+        Check as I go
+      </button>
+      {
+        unit.equations && (
+          <button type="button" class="tool" data-toggle="equations" aria-expanded="false" aria-controls="equations">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 19.5V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2.5Z" />
+              <path d="M8 7h7M8 11h5" />
+            </svg>
+            <span class="tool-label">Equations</span>
+          </button>
+        )
+      }
+      <ThemeToggle />
+      <a class="tool" href={unitUrl}>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M14 4h5v16h-5" />
+          <path d="M10 8l-4 4 4 4M6 12h10" />
+        </svg>
+        <span class="tool-label">Exit</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="popover directions" id="directions" hidden>
+    <h2>Directions</h2>
+    <p>
+      Choose the best answer to each question, then press <strong>Next</strong>. Mark a question to come back to it,
+      and use the question menu at the bottom to jump around. The timer runs at exam pace: {multipleChoice.minutes}
+      minutes for {multipleChoice.questions} questions.
+    </p>
+    <p>
+      Turn on <strong>Check as I go</strong> to see the worked solution after each question. Otherwise your score
+      and every solution appear when you finish.
+    </p>
+    <p class="fine-print">
+      AP® is a registered trademark of the College Board, which is not affiliated with this site. All practice
+      questions are original.
+    </p>
+  </div>
+
+  {
+    unit.equations && (
+      <aside class="drawer" id="equations" aria-label="Equation sheet" hidden>
+        <div class="drawer-head">
+          <h2>Equations: {unit.title.toLowerCase()}</h2>
+          <button type="button" class="icon-button" data-toggle="equations" aria-label="Close equations">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 6l12 12M18 6 6 18" />
+            </svg>
+          </button>
+        </div>
+        <dl class="equations">
+          {unit.equations.map((eq) => (
+            <div>
+              <dt>{eq.label}</dt>
+              <dd set:html={mathHtml(eq.tex)} />
+            </div>
+          ))}
+        </dl>
+      </aside>
+    )
+  }
+
+  <div class="question-bar" data-question-bar>
+    <div class="question-bar-start">
+      <span class="q-number" data-number>1</span>
+      <button type="button" class="mark" data-mark aria-pressed="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21Z"></path></svg>
+        <span data-mark-label>Mark for review</span>
+      </button>
+    </div>
+    <button type="button" class="cross-toggle" data-cross-mode aria-pressed="false" aria-label="Cross out answer choices">
+      <span>ABC</span>
+    </button>
+  </div>
+
+  <main id="main" class="exam-main">
+    {
+      items.map((q) => (
+        <article class="question" data-question data-id={q.id} data-topic={q.topic} data-answer={q.entry.data.answer} hidden>
+          <p class="q-meta">
+            Topic {q.topic} · {q.topicTitle}
+          </p>
+          <div class="stem" id={`stem-${q.id}`} set:html={q.stemHtml} />
+          {q.figureSvg && <figure class="figure" set:html={q.figureSvg} />}
+          <div class="choices" role="radiogroup" aria-labelledby={`stem-${q.id}`}>
+            {letters.map((l) => (
+              <div class="choice-row" data-row={l}>
+                <label class="choice" data-choice={l}>
+                  <input type="radio" name={`answer-${q.id}`} value={l} />
+                  <span class="letter">{l}</span>
+                  <span class="choice-text" set:html={q.choicesHtml[l]} />
+                </label>
+                <button type="button" class="cross-button" data-cross={l} aria-label={`Cross out choice ${l}`}>
+                  <span>{l}</span>
+                </button>
+                <button type="button" class="undo-button" data-undo={l} aria-label={`Bring back choice ${l}`}>
+                  Undo
+                </button>
+              </div>
+            ))}
+          </div>
+          <button type="button" class="button button-primary check-button" data-check disabled hidden>
+            Check answer
+          </button>
+          <div class="feedback" data-feedback hidden>
+            <p class="verdict" data-verdict />
+            {letters
+              .filter((l) => q.whyWrongHtml[l])
+              .map((l) => (
+                <p class="why" data-why={l} hidden>
+                  <strong>Why {l} is wrong:</strong> <span set:html={q.whyWrongHtml[l]} />
+                </p>
+              ))}
+            <h3 class="small-label">Worked solution</h3>
+            <div class="solution">
+              <q.Content />
+            </div>
+          </div>
+        </article>
+      ))
+    }
+
+    <section class="results" data-results aria-labelledby="results-title" hidden>
+      <div class="results-head">
+        <div>
+          <p class="small-label" data-results-meta>Your results</p>
+          <h1 id="results-title" data-score tabindex="-1">Your results</h1>
+        </div>
+        <div class="results-actions">
+          <button type="button" class="button button-primary" data-restart>Try again</button>
+          <a class="button button-secondary" href={unitUrl}>Back to Unit {unit.number}</a>
+        </div>
+      </div>
+
+      <table class="breakdown">
+        <thead>
+          <tr><th scope="col">Topic</th><th scope="col">Correct</th></tr>
+        </thead>
+        <tbody data-breakdown></tbody>
+      </table>
+
+      <ol class="review">
+        {
+          items.map((q) => (
+            <li class="review-card" data-review={q.id} hidden>
+              <div class="review-top">
+                <span class="q-number small" data-review-number />
+                <span class="pill" data-review-verdict />
+                <span class="q-meta">Topic {q.topic}</span>
+              </div>
+              <div class="stem" set:html={q.stemHtml} />
+              {q.figureSvg && <figure class="figure" set:html={q.figureSvg} />}
+              <p>
+                <strong>Your answer:</strong> <span data-review-yours /> · <strong>Correct answer:</strong>{' '}
+                {q.entry.data.answer}
+              </p>
+              {letters
+                .filter((l) => q.whyWrongHtml[l])
+                .map((l) => (
+                  <p class="why" data-why={l} hidden>
+                    <strong>Why {l} is wrong:</strong> <span set:html={q.whyWrongHtml[l]} />
+                  </p>
+                ))}
+              <div class="solution-box">
+                <h3 class="small-label">Worked solution</h3>
+                <div class="solution">
+                  <q.Content />
+                </div>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+  </main>
+
+  <footer class="exam-footer" data-exam-footer>
+    <span class="answered" data-answered></span>
+    <div class="nav-wrap">
+      <button type="button" class="nav-toggle" data-nav-toggle aria-expanded="false" aria-controls="question-menu">
+        <span><span class="long">Question </span><span data-counter></span></span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"></path></svg>
+      </button>
+      <div class="popover nav-menu" id="question-menu" hidden>
+        <h2>Unit {unit.number} practice questions</h2>
+        <ul class="legend">
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true" class="pin"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Z"></path></svg>
+            Current
+          </li>
+          <li><span class="legend-box"></span>Unanswered</li>
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true" class="flag"><path d="M6 3h12v18l-6-4.5L6 21Z"></path></svg>
+            For review
+          </li>
+        </ul>
+        <ol class="tiles" data-tiles></ol>
+        <button type="button" class="button button-secondary finish-button" data-finish>Finish and see results</button>
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <button type="button" class="button button-secondary" data-back>Back</button>
+      <button type="button" class="button button-primary" data-next>Next</button>
+    </div>
+  </footer>
+</div>
+
+<script>
+  import { setUpPractice } from '../scripts/practice';
+
+  for (const exam of document.querySelectorAll<HTMLElement>('[data-exam]')) setUpPractice(exam);
+</script>
+
+<style>
+  .exam {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: var(--bg);
+  }
+
+  .exam button {
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  .exam svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ---------- header ---------- */
+
+  .exam-header {
+    position: sticky;
+    top: 0;
+    z-index: 6;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px 24px;
+    padding: 10px max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px));
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+  }
+
+  .exam-title {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.35;
+  }
+
+  .exam-title strong {
+    font-size: 1.05rem;
+  }
+
+  .deck-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 10px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .deck-line a {
+    font-weight: 600;
+  }
+
+  .link-button {
+    align-self: flex-start;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 0;
+    border: 0;
+    background: none;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .link-button svg {
+    width: 14px;
+    height: 14px;
+    stroke-width: 2.4;
+  }
+
+  .link-button[aria-expanded='true'] svg {
+    transform: rotate(180deg);
+  }
+
+  .timer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    min-width: 7.5rem;
+  }
+
+  .clock {
+    font-family: var(--font-mono);
+    font-size: 1.4rem;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+  }
+
+  .timer.is-hidden .clock {
+    visibility: hidden;
+  }
+
+  .timer.is-up .clock,
+  .time-up {
+    color: var(--highlight);
+  }
+
+  .time-up {
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  .pill-button {
+    padding: 2px 12px;
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    background: var(--surface);
+    color: var(--text);
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .tools {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 10px;
+  }
+
+  .tool {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    min-width: 56px;
+    min-height: 44px;
+    padding: 4px 8px;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: none;
+    color: var(--text);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .tool:hover,
+  .tool[aria-expanded='true'] {
+    background: var(--surface-2);
+    color: var(--text);
+  }
+
+  .tool svg {
+    width: 22px;
+    height: 22px;
+    stroke-width: 1.8;
+  }
+
+  .switch {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 6px;
+    border: 0;
+    background: none;
+    color: var(--text);
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .switch-track {
+    position: relative;
+    width: 38px;
+    height: 22px;
+    border-radius: 99px;
+    background: var(--border);
+    transition: background-color 0.15s;
+  }
+
+  .switch-thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--surface);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.25);
+    transition: transform 0.15s;
+  }
+
+  .switch[aria-checked='true'] .switch-track {
+    background: var(--accent);
+  }
+
+  .switch[aria-checked='true'] .switch-thumb {
+    transform: translateX(16px);
+  }
+
+  /* ---------- popovers and the equation drawer ---------- */
+
+  .popover {
+    z-index: 8;
+    padding: 18px 20px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+  }
+
+  .popover h2,
+  .drawer h2 {
+    margin: 0 0 8px;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    letter-spacing: 0;
+  }
+
+  .directions {
+    position: absolute;
+    top: 76px;
+    left: max(16px, env(safe-area-inset-left, 0px));
+    width: min(440px, calc(100% - 32px));
+    font-size: 0.95rem;
+  }
+
+  .directions p:last-child {
+    margin-bottom: 0;
+  }
+
+  .fine-print {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9;
+    width: min(380px, 100%);
+    padding: 16px max(20px, env(safe-area-inset-right, 0px)) 20px 20px;
+    overflow-y: auto;
+    border-left: 1px solid var(--border);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+  }
+
+  .drawer-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .drawer-head h2 {
+    margin: 0;
+  }
+
+  .icon-button {
+    display: inline-grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: none;
+    color: var(--text);
+  }
+
+  .icon-button svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .equations {
+    display: grid;
+    gap: 10px;
+    margin: 12px 0 0;
+  }
+
+  .equations div {
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+  }
+
+  .equations dt {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .equations dd {
+    margin: 2px 0 0;
+    font-size: 1.05rem;
+    overflow-x: auto;
+  }
+
+  /* ---------- question bar ---------- */
+
+  .question-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 6px max(16px, env(safe-area-inset-right, 0px)) 6px max(16px, env(safe-area-inset-left, 0px));
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-2);
+  }
+
+  .question-bar-start {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .q-number {
+    display: inline-grid;
+    place-items: center;
+    min-width: 34px;
+    height: 34px;
+    padding: 0 6px;
+    border-radius: 6px;
+    background: var(--text);
+    color: var(--bg);
+    font-family: var(--font-mono);
+    font-weight: 600;
+  }
+
+  .q-number.small {
+    min-width: 30px;
+    height: 30px;
+    font-size: 0.9rem;
+  }
+
+  .mark {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    padding: 0 4px;
+    border: 0;
+    background: none;
+    color: var(--text);
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .mark svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .mark[aria-pressed='true'] svg {
+    fill: var(--highlight);
+    stroke: var(--highlight);
+  }
+
+  .cross-toggle {
+    display: inline-grid;
+    place-items: center;
+    min-width: 54px;
+    height: 36px;
+    padding: 0 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 0.8rem;
+  }
+
+  .cross-toggle span {
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+  }
+
+  .cross-toggle[aria-pressed='true'] {
+    border-color: var(--text);
+    background: var(--text);
+    color: var(--bg);
+  }
+
+  /* ---------- question ---------- */
+
+  .exam-main {
+    flex: 1;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 28px max(16px, env(safe-area-inset-right, 0px)) 40px max(16px, env(safe-area-inset-left, 0px));
+  }
+
+  .question {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  .q-meta {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .stem {
+    font-size: 1.125rem;
+    max-width: 42em;
+  }
+
+  .stem :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .figure {
+    margin: 0;
+    max-width: 440px;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+  }
+
+  .figure :global(svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Shared figure styles: any question figure can use these classes. */
+  .figure :global(.fig-grid) {
+    fill: none;
+    stroke: var(--grid-major);
+    stroke-width: 1;
+  }
+
+  .figure :global(.fig-axis) {
+    fill: none;
+    stroke: var(--text);
+    stroke-width: 1.5;
+  }
+
+  .figure :global(.fig-line) {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 3;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  .figure :global(.fig-point) {
+    fill: var(--accent);
+    stroke: none;
+  }
+
+  .figure :global(.fig-label),
+  .figure :global(.fig-title) {
+    fill: var(--text-muted);
+    stroke: none;
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+
+  .figure :global(.fig-title) {
+    fill: var(--text);
+    font-size: 12px;
+  }
+
+  .choices {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .choice-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .choice {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 52px;
+    padding: 13px 17px;
+    border: 1px solid var(--text-muted);
+    border-radius: 10px;
+    background: var(--surface);
+    cursor: pointer;
+  }
+
+  .choice:hover {
+    border-color: var(--accent);
+  }
+
+  .choice input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .choice:has(input:focus-visible) {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .letter {
+    flex-shrink: 0;
+    display: inline-grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border: 1.5px solid var(--text);
+    border-radius: 50%;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+
+  .choice-text {
+    min-width: 0;
+  }
+
+  .choice:has(input:checked) {
+    border: 2px solid var(--accent);
+    padding: 12px 16px;
+    background: var(--accent-soft);
+  }
+
+  .choice:has(input:checked) .letter {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--accent-text);
+  }
+
+  .cross-button,
+  .undo-button {
+    flex-shrink: 0;
+    display: none;
+    place-items: center;
+    min-width: 44px;
+    height: 44px;
+    border: 0;
+    background: none;
+    color: var(--text);
+  }
+
+  .cross-button span {
+    display: inline-grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border: 1.5px solid currentColor;
+    border-radius: 50%;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+  }
+
+  .undo-button {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-decoration: underline;
+  }
+
+  .exam[data-cross-mode] .choice-row:not(.is-crossed, .is-locked) .cross-button,
+  .choice-row.is-crossed:not(.is-locked) .undo-button {
+    display: inline-grid;
+  }
+
+  .choice-row.is-crossed .choice {
+    cursor: default;
+  }
+
+  .choice-row.is-crossed .choice-text,
+  .choice-row.is-crossed .letter {
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+    color: var(--text-muted);
+  }
+
+  .choice-row.is-locked .choice {
+    cursor: default;
+  }
+
+  .choice-row.is-locked:not(.is-correct, .is-wrong) .choice {
+    border-color: var(--border);
+    opacity: 0.7;
+  }
+
+  .choices .choice-row.is-correct .choice {
+    border: 2px solid var(--force-green);
+    padding: 12px 16px;
+    background: var(--force-green-soft);
+  }
+
+  .choices .choice-row.is-correct .letter {
+    border-color: var(--force-green);
+    background: var(--force-green);
+    color: var(--bg);
+  }
+
+  .choices .choice-row.is-wrong .choice {
+    border: 2px solid var(--highlight);
+    padding: 12px 16px;
+    background: var(--highlight-soft);
+  }
+
+  .choices .choice-row.is-wrong .letter {
+    border-color: var(--highlight);
+    background: var(--highlight);
+    color: var(--bg);
+  }
+
+  .check-button {
+    justify-self: start;
+  }
+
+  .button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .feedback {
+    min-width: 0;
+    padding: 16px 20px;
+    border-left: 4px solid var(--highlight);
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+  }
+
+  .feedback.is-right {
+    border-left-color: var(--force-green);
+  }
+
+  .verdict {
+    margin-bottom: 0.5em;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--highlight);
+  }
+
+  .feedback.is-right .verdict {
+    color: var(--force-green);
+  }
+
+  .small-label {
+    margin: 0 0 4px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .solution :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .solution :global(ul) {
+    padding-left: 1.2em;
+  }
+
+  .solution :global(.katex-display) {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 4px 0;
+  }
+
+  /* ---------- results ---------- */
+
+  .results {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+
+  .results-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .results-head h1 {
+    margin: 0;
+    font-size: clamp(2rem, 6vw, 2.6rem);
+  }
+
+  .results-head h1:focus {
+    outline: none;
+  }
+
+  .results-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .breakdown {
+    width: 100%;
+    max-width: 560px;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+
+  .breakdown th {
+    text-align: left;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .breakdown th,
+  .breakdown :global(td) {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .breakdown th:last-child,
+  .breakdown :global(td:last-child) {
+    padding-left: 16px;
+    text-align: right;
+    font-family: var(--font-mono);
+    white-space: nowrap;
+  }
+
+  .breakdown :global(tr.missed td:last-child) {
+    color: var(--highlight);
+  }
+
+  .review {
+    display: grid;
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .review-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    padding: 18px 20px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+
+  .review-card p {
+    margin: 0;
+  }
+
+  .review-card .stem {
+    font-size: 1rem;
+  }
+
+  .review-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 14px;
+  }
+
+  .pill {
+    padding: 3px 10px;
+    border-radius: 99px;
+    background: var(--highlight-soft);
+    color: var(--highlight);
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  .pill.is-right {
+    background: var(--force-green-soft);
+    color: var(--force-green);
+  }
+
+  .solution-box {
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+  }
+
+  /* ---------- footer ---------- */
+
+  .exam-footer {
+    position: sticky;
+    bottom: 0;
+    z-index: 6;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px 16px;
+    padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px))
+      max(16px, env(safe-area-inset-left, 0px));
+    border-top: 1px solid var(--border);
+    background: var(--bg);
+  }
+
+  .answered {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .nav-wrap {
+    position: relative;
+  }
+
+  .nav-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 18px;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: var(--text);
+    color: var(--bg);
+    font-size: 0.95rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .nav-toggle svg {
+    width: 14px;
+    height: 14px;
+    stroke-width: 2.6;
+  }
+
+  .nav-toggle[aria-expanded='true'] svg {
+    transform: rotate(180deg);
+  }
+
+  .nav-menu {
+    position: absolute;
+    bottom: calc(100% + 12px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(440px, calc(100vw - 32px));
+    display: grid;
+    gap: 14px;
+    text-align: center;
+  }
+
+  .nav-menu h2 {
+    margin: 0;
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .legend li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .legend svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .legend .pin,
+  .tiles :global(.pin) {
+    fill: var(--text);
+    stroke: none;
+  }
+
+  .legend .flag,
+  .tiles :global(.flag) {
+    fill: var(--highlight);
+    stroke: none;
+  }
+
+  .legend-box {
+    width: 14px;
+    height: 14px;
+    border: 1px dashed var(--accent);
+  }
+
+  .tiles {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .tiles :global(li) {
+    position: relative;
+    padding-top: 16px;
+  }
+
+  .tiles :global(li > svg) {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+  }
+
+  .tiles :global(.pin) {
+    top: 0;
+    left: 15px;
+  }
+
+  .tiles :global(.flag) {
+    top: 10px;
+    right: -5px;
+  }
+
+  .tiles :global(button) {
+    width: 44px;
+    height: 44px;
+    border: 1px dashed var(--accent);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .tiles :global(button.is-answered) {
+    border-style: solid;
+    background: var(--accent);
+    color: var(--accent-text);
+  }
+
+  .finish-button {
+    justify-self: center;
+  }
+
+  .nav-buttons {
+    display: flex;
+    gap: 10px;
+  }
+
+  .nav-buttons .button,
+  .results-actions .button,
+  .finish-button,
+  .check-button {
+    min-height: 44px;
+    border-radius: 99px;
+    font-size: 0.95rem;
+  }
+
+  .exam.is-finished .question-bar,
+  .exam.is-finished .exam-footer {
+    display: none;
+  }
+
+  /* ---------- phones ---------- */
+
+  @media (max-width: 640px) {
+    .tool-label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+    }
+
+    .tool {
+      min-width: 44px;
+    }
+
+    .answered {
+      display: none;
+    }
+
+    .stem {
+      font-size: 1.02rem;
+    }
+
+    .choice {
+      gap: 12px;
+      padding: 11px 13px;
+    }
+
+    .choice:has(input:checked),
+    .choices .choice-row.is-correct .choice,
+    .choices .choice-row.is-wrong .choice {
+      padding: 10px 12px;
+    }
+
+    .directions {
+      top: 120px;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .long {
+      display: none;
+    }
+
+    .nav-toggle {
+      padding: 0 14px;
+    }
+
+    .nav-buttons .button {
+      padding-inline: 1em;
+    }
+  }
+</style>

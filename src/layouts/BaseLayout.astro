@@ -12,9 +12,11 @@ interface Props {
   description?: string;
   /** Fit the whole page into one screen with no scrolling (used by the home page) */
   oneScreen?: boolean;
+  /** Leave out the site header and footer; the page brings its own (used by practice) */
+  bare?: boolean;
 }
 
-const { title, description = site.description, oneScreen = false } = Astro.props;
+const { title, description = site.description, oneScreen = false, bare = false } = Astro.props;
 const pageTitle = title ? `${title} | ${site.name}` : site.name;
 
 // Highlight the nav link for the section we're in.
@@ -33,7 +35,7 @@ const navLinks = [{ href: '/units', label: 'Units', active: path.startsWith('/un
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
     />
     <title>{pageTitle}</title>
     <script is:inline>
@@ -43,45 +45,53 @@ const navLinks = [{ href: '/units', label: 'Units', active: path.startsWith('/un
       } catch {}
     </script>
   </head>
-  <body class:list={['graph-paper', { 'one-screen': oneScreen }]}>
-    <a class="skip-link" href="#main">Skip to content</a>
-    <header class="site-header">
-      <div class="container header-inner">
-        <a class="brand" href={url('/')}>
-          <Logo />
-          <span>{site.name}</span>
-        </a>
-        <div class="header-end">
-          <nav aria-label="Main">
-            <ul>
-              {
-                navLinks.map((link) => (
-                  <li>
-                    <a href={url(link.href)} aria-current={link.active ? 'page' : undefined}>
-                      {link.label}
-                    </a>
-                  </li>
-                ))
-              }
-            </ul>
-          </nav>
-          <ThemeToggle />
-        </div>
-      </div>
-    </header>
+  <body class:list={[bare ? 'bare' : 'graph-paper', { 'one-screen': oneScreen }]}>
+    {
+      bare ? (
+        <slot />
+      ) : (
+        <>
+          <a class="skip-link" href="#main">
+            Skip to content
+          </a>
+          <header class="site-header">
+            <div class="container header-inner">
+              <a class="brand" href={url('/')}>
+                <Logo />
+                <span>{site.name}</span>
+              </a>
+              <div class="header-end">
+                <nav aria-label="Main">
+                  <ul>
+                    {navLinks.map((link) => (
+                      <li>
+                        <a href={url(link.href)} aria-current={link.active ? 'page' : undefined}>
+                          {link.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
+                <ThemeToggle />
+              </div>
+            </div>
+          </header>
 
-    <main id="main">
-      <slot />
-    </main>
+          <main id="main">
+            <slot />
+          </main>
 
-    <footer class="site-footer">
-      <div class="container">
-        <p>
-          AP® is a registered trademark of the College Board, which is not affiliated with and does not
-          endorse this site. All practice questions are original.
-        </p>
-      </div>
-    </footer>
+          <footer class="site-footer">
+            <div class="container">
+              <p>
+                AP® is a registered trademark of the College Board, which is not affiliated with and does
+                not endorse this site. All practice questions are original.
+              </p>
+            </div>
+          </footer>
+        </>
+      )
+    }
   </body>
 </html>
 
