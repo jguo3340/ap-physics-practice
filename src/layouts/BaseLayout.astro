@@ -39,7 +39,7 @@ const navLinks = [{ href: '/units', label: 'Units', active: path.startsWith('/un
     <script is:inline>
       // Apply the saved light/dark choice before the page paints, so it never flashes.
       try {
-        if (localStorage.getItem('theme') === 'dark') document.documentElement.dataset.theme = 'dark';
+        if (localStorage.getItem('theme') === 'dark') document.documentElement.dataset.mode = 'dark';
       } catch {}
     </script>
   </head>

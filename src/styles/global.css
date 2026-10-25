@@ -1,6 +1,6 @@
 /* Colors, fonts, and spacing live here as variables, so the whole site can be
    restyled from one place. The site is light by default; the theme switch in
-   the header sets data-theme="dark" on <html>, which swaps the color variables. */
+   the header sets data-mode="dark" on <html>, which swaps the color variables. */
 
 :root {
   --bg: #ffffff;
@@ -33,7 +33,7 @@
   color-scheme: light;
 }
 
-:root[data-theme='dark'] {
+:root[data-mode='dark'] {
   --bg: #0d1526;
   --surface: #111b30;
   --surface-2: #17233d;

@@ -16,20 +16,40 @@
 </button>
 
 <script>
+  // The attribute is data-mode rather than data-theme so pages embedded in other
+  // apps can't have their theme overridden by the host.
   const root = document.documentElement;
-  for (const button of document.querySelectorAll<HTMLButtonElement>('.theme-toggle')) {
-    button.setAttribute('aria-pressed', String(root.dataset.theme === 'dark'));
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.theme-toggle');
+
+  function savedMode() {
+    try {
+      return localStorage.getItem('theme') === 'dark' ? 'dark' : 'light';
+    } catch {
+      return root.dataset.mode === 'dark' ? 'dark' : 'light';
+    }
+  }
+
+  function apply(mode: 'dark' | 'light') {
+    root.dataset.mode = mode;
+    for (const button of buttons) button.setAttribute('aria-pressed', String(mode === 'dark'));
+  }
+
+  for (const button of buttons) {
     button.addEventListener('click', () => {
-      const dark = root.dataset.theme !== 'dark';
-      root.dataset.theme = dark ? 'dark' : 'light';
-      button.setAttribute('aria-pressed', String(dark));
+      const mode = root.dataset.mode === 'dark' ? 'light' : 'dark';
+      apply(mode);
       try {
-        localStorage.setItem('theme', root.dataset.theme);
+        localStorage.setItem('theme', mode);
       } catch {
         // Private windows can block storage; the switch still works for this visit.
       }
     });
   }
+
+  apply(savedMode());
+  // The back button can restore a page exactly as it was left, so re-read the
+  // saved choice whenever a page is shown again.
+  window.addEventListener('pageshow', () => apply(savedMode()));
 </script>
 
 <style>
