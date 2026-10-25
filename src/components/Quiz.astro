@@ -1,0 +1,636 @@
+---
+// The practice quiz on a unit page. Every question is built into the page
+// ahead of time; the script at the bottom only shows one at a time, checks
+// answers, and adds up the score.
+import 'katex/dist/katex.min.css';
+import { render } from 'astro:content';
+import { letters, type PreparedQuestion } from '../lib/questions';
+import type { Topic } from '../data/units';
+
+interface Props {
+  questions: PreparedQuestion[];
+  topics: Topic[];
+}
+
+const { questions, topics } = Astro.props;
+const difficulty = { 1: 'Easy', 2: 'Medium', 3: 'Hard' };
+const items = await Promise.all(
+  questions.map(async (q) => ({ ...q, Content: (await render(q.entry)).Content })),
+);
+const topicCounts = topics
+  .map((topic) => ({ ...topic, count: questions.filter((q) => q.topic === topic.id).length }))
+  .filter((topic) => topic.count > 0);
+---
+
+<div class="quiz" data-quiz>
+  <div class="quiz-bar">
+    <label class="topic-filter">
+      <span>Topic</span>
+      <select data-topic-filter>
+        <option value="all">All topics ({questions.length})</option>
+        {topicCounts.map((t) => <option value={t.id}>{t.id} {t.title} ({t.count})</option>)}
+      </select>
+    </label>
+    <p class="counter" data-counter aria-live="polite"></p>
+  </div>
+  <ol class="progress" data-progress aria-hidden="true"></ol>
+
+  {
+    items.map((q) => (
+      <article class="question" data-question data-topic={q.topic} data-answer={q.entry.data.answer}>
+        <p class="q-meta">
+          <span>
+            Topic {q.topic} · {q.topicTitle}
+          </span>
+          <span>
+            {difficulty[q.difficulty]} · {q.sourceLabel}
+          </span>
+        </p>
+        <div class="stem" id={`stem-${q.id}`} set:html={q.stemHtml} />
+        {q.figureSvg && <figure class="figure" set:html={q.figureSvg} />}
+        <div class="choices" role="radiogroup" aria-labelledby={`stem-${q.id}`}>
+          {letters.map((l) => (
+            <label class="choice" data-choice={l}>
+              <input type="radio" name={`answer-${q.id}`} value={l} />
+              <span class="letter">{l}</span>
+              <span class="choice-text" set:html={q.choicesHtml[l]} />
+            </label>
+          ))}
+        </div>
+        <div class="feedback" data-feedback hidden>
+          <p class="verdict" data-verdict />
+          {letters
+            .filter((l) => q.whyWrongHtml[l])
+            .map((l) => (
+              <p class="why" data-why={l} hidden>
+                <strong>Why {l} is wrong:</strong> <span set:html={q.whyWrongHtml[l]} />
+              </p>
+            ))}
+          <div class="solution">
+            <h3>Worked solution</h3>
+            <q.Content />
+          </div>
+          <details class="others">
+            <summary>Why each wrong choice is wrong</summary>
+            <ul>
+              {letters
+                .filter((l) => q.whyWrongHtml[l])
+                .map((l) => (
+                  <li>
+                    <strong>{l}.</strong> <span set:html={q.whyWrongHtml[l]} />
+                  </li>
+                ))}
+            </ul>
+          </details>
+        </div>
+        <div class="q-actions">
+          <button type="button" class="button button-primary" data-check disabled>
+            Check answer
+          </button>
+          <button type="button" class="button button-primary" data-next hidden>
+            Next question →
+          </button>
+        </div>
+      </article>
+    ))
+  }
+
+  <section class="results" data-results hidden>
+    <p class="score" data-score tabindex="-1"></p>
+    <table class="breakdown">
+      <thead>
+        <tr><th scope="col">Topic</th><th scope="col">Correct</th></tr>
+      </thead>
+      <tbody data-breakdown></tbody>
+    </table>
+    <button type="button" class="button button-secondary" data-restart>Try again</button>
+  </section>
+</div>
+
+<script>
+  for (const quiz of document.querySelectorAll<HTMLElement>('[data-quiz]')) setUp(quiz);
+
+  function setUp(quiz: HTMLElement) {
+    const all = [...quiz.querySelectorAll<HTMLElement>('[data-question]')];
+    const filter = quiz.querySelector<HTMLSelectElement>('[data-topic-filter]')!;
+    const counter = quiz.querySelector<HTMLElement>('[data-counter]')!;
+    const progress = quiz.querySelector<HTMLElement>('[data-progress]')!;
+    const results = quiz.querySelector<HTMLElement>('[data-results]')!;
+    const topicNames = new Map([...filter.options].map((o) => [o.value, o.text.replace(/ \(\d+\)$/, '')]));
+
+    let deck: HTMLElement[] = [];
+    let index = 0;
+    let correct: boolean[] = [];
+
+    function start() {
+      deck = all.filter((q) => filter.value === 'all' || q.dataset.topic === filter.value);
+      index = 0;
+      correct = [];
+      all.forEach(reset);
+      progress.replaceChildren(...deck.map(() => document.createElement('li')));
+      results.hidden = true;
+      show(0);
+    }
+
+    function reset(q: HTMLElement) {
+      for (const input of q.querySelectorAll('input')) {
+        input.checked = false;
+        input.disabled = false;
+      }
+      for (const label of q.querySelectorAll('.choice')) label.classList.remove('is-correct', 'is-wrong');
+      for (const why of q.querySelectorAll<HTMLElement>('[data-why]')) why.hidden = true;
+      q.querySelector<HTMLDetailsElement>('.others')!.open = false;
+      q.querySelector<HTMLElement>('[data-feedback]')!.hidden = true;
+      const check = q.querySelector<HTMLButtonElement>('[data-check]')!;
+      check.hidden = false;
+      check.disabled = true;
+      q.querySelector<HTMLElement>('[data-next]')!.hidden = true;
+    }
+
+    function show(i: number) {
+      index = i;
+      for (const q of all) q.hidden = q !== deck[i];
+      counter.textContent = `Question ${i + 1} of ${deck.length}`;
+      [...progress.children].forEach((dot, n) => dot.classList.toggle('current', n === i));
+    }
+
+    function check(q: HTMLElement) {
+      const picked = q.querySelector<HTMLInputElement>('input:checked');
+      if (!picked) return;
+      const answer = q.dataset.answer!;
+      const right = picked.value === answer;
+      correct[index] = right;
+      for (const input of q.querySelectorAll('input')) input.disabled = true;
+      q.querySelector(`[data-choice="${answer}"]`)!.classList.add('is-correct');
+      if (!right) q.querySelector(`[data-choice="${picked.value}"]`)!.classList.add('is-wrong');
+
+      const verdict = q.querySelector<HTMLElement>('[data-verdict]')!;
+      verdict.textContent = right ? 'Correct.' : `Not quite. The answer is ${answer}.`;
+      verdict.classList.toggle('right', right);
+      const why = q.querySelector<HTMLElement>(`[data-why="${picked.value}"]`);
+      if (why) why.hidden = false;
+      q.querySelector<HTMLElement>('[data-feedback]')!.hidden = false;
+      progress.children[index].classList.add(right ? 'right' : 'wrong');
+
+      const next = q.querySelector<HTMLButtonElement>('[data-next]')!;
+      next.textContent = index === deck.length - 1 ? 'See my score' : 'Next question →';
+      q.querySelector<HTMLElement>('[data-check]')!.hidden = true;
+      next.hidden = false;
+      next.focus();
+    }
+
+    function next() {
+      if (index < deck.length - 1) {
+        show(index + 1);
+        deck[index].querySelector('input')?.focus({ preventScroll: true });
+      } else {
+        finish();
+      }
+      if (quiz.getBoundingClientRect().top < 0) quiz.scrollIntoView({ block: 'start' });
+    }
+
+    function finish() {
+      for (const q of all) q.hidden = true;
+      const score = correct.filter(Boolean).length;
+      counter.textContent = 'Done';
+      const scoreLine = results.querySelector<HTMLElement>('[data-score]')!;
+      scoreLine.textContent = `You got ${score} of ${deck.length} right.`;
+
+      const byTopic = new Map<string, [number, number]>();
+      deck.forEach((q, n) => {
+        const [right, total] = byTopic.get(q.dataset.topic!) ?? [0, 0];
+        byTopic.set(q.dataset.topic!, [right + (correct[n] ? 1 : 0), total + 1]);
+      });
+      const rows = [...byTopic].map(([topic, [right, total]]) => {
+        const row = document.createElement('tr');
+        const name = document.createElement('td');
+        const count = document.createElement('td');
+        name.textContent = topicNames.get(topic) ?? topic;
+        count.textContent = `${right} / ${total}`;
+        if (right < total) row.classList.add('missed');
+        row.append(name, count);
+        return row;
+      });
+      results.querySelector('[data-breakdown]')!.replaceChildren(...rows);
+      results.hidden = false;
+      scoreLine.focus();
+    }
+
+    for (const q of all) {
+      q.addEventListener('change', () => {
+        q.querySelector<HTMLButtonElement>('[data-check]')!.disabled = false;
+      });
+      q.querySelector('[data-check]')!.addEventListener('click', () => check(q));
+      q.querySelector('[data-next]')!.addEventListener('click', next);
+    }
+    filter.addEventListener('change', start);
+    results.querySelector('[data-restart]')!.addEventListener('click', () => {
+      start();
+      deck[0].querySelector('input')?.focus();
+    });
+
+    start();
+  }
+</script>
+
+<style>
+  .quiz {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    margin-top: 8px;
+    scroll-margin-top: 76px;
+  }
+
+  .quiz-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .topic-filter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    max-width: 100%;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .topic-filter select {
+    min-width: 0;
+    max-width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+    font-weight: 500;
+  }
+
+  .counter {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .progress {
+    display: flex;
+    gap: 6px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .progress :global(li) {
+    flex: 1;
+    height: 6px;
+    border-radius: 99px;
+    background: var(--surface-2);
+    box-shadow: inset 0 0 0 1px var(--border);
+  }
+
+  .progress :global(li.current) {
+    box-shadow: inset 0 0 0 2px var(--accent);
+  }
+
+  .progress :global(li.right) {
+    background: var(--force-green);
+    box-shadow: none;
+  }
+
+  .progress :global(li.wrong) {
+    background: var(--highlight);
+    box-shadow: none;
+  }
+
+  .question {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    min-width: 0;
+  }
+
+  .q-meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 4px 16px;
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .stem {
+    font-size: 1.1rem;
+    max-width: 42em;
+  }
+
+  .stem :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .figure {
+    margin: 0;
+    max-width: 440px;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+  }
+
+  .figure :global(svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Shared figure styles: any question figure can use these classes. */
+  .figure :global(.fig-grid) {
+    fill: none;
+    stroke: var(--grid-major);
+    stroke-width: 1;
+  }
+
+  .figure :global(.fig-axis) {
+    fill: none;
+    stroke: var(--text);
+    stroke-width: 1.5;
+  }
+
+  .figure :global(.fig-line) {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 3;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  .figure :global(.fig-point) {
+    fill: var(--accent);
+  }
+
+  .figure :global(.fig-label),
+  .figure :global(.fig-title) {
+    fill: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+
+  .figure :global(.fig-title) {
+    fill: var(--text);
+    font-size: 12px;
+  }
+
+  .choices {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .choice {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    cursor: pointer;
+    transition:
+      border-color 0.15s,
+      background-color 0.15s;
+  }
+
+  .choice:hover {
+    border-color: var(--accent);
+  }
+
+  .choice input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .choice:has(input:focus-visible) {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .choice:has(input:checked) {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  .choice:has(input:disabled) {
+    cursor: default;
+  }
+
+  .choice:has(input:disabled):not(.is-correct, .is-wrong) {
+    border-color: var(--border);
+    background: var(--surface);
+    opacity: 0.7;
+  }
+
+  .letter {
+    display: inline-grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .choice:has(input:checked) .letter {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--accent-text);
+  }
+
+  .choice-text {
+    min-width: 0;
+  }
+
+  .choices .choice.is-correct {
+    border-color: var(--force-green);
+    background: var(--force-green-soft);
+  }
+
+  .choices .choice.is-correct .letter {
+    border-color: var(--force-green);
+    background: var(--force-green);
+    color: var(--bg);
+  }
+
+  .choices .choice.is-wrong {
+    border-color: var(--highlight);
+    background: var(--highlight-soft);
+  }
+
+  .choices .choice.is-wrong .letter {
+    border-color: var(--highlight);
+    background: var(--highlight);
+    color: var(--bg);
+  }
+
+  .feedback {
+    min-width: 0;
+    padding: 16px 20px;
+    border-left: 4px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+  }
+
+  .feedback:has(.verdict.right) {
+    border-left-color: var(--force-green);
+  }
+
+  .feedback:has(.verdict:not(.right)) {
+    border-left-color: var(--highlight);
+  }
+
+  .verdict {
+    margin-bottom: 0.5em;
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--highlight);
+  }
+
+  .verdict.right {
+    color: var(--force-green);
+  }
+
+  .solution {
+    margin-top: 12px;
+  }
+
+  .solution h3,
+  .others summary {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .solution :global(ul) {
+    padding-left: 1.2em;
+  }
+
+  .solution :global(.katex-display) {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 4px 0;
+  }
+
+  .others {
+    margin-top: 4px;
+  }
+
+  .others summary {
+    cursor: pointer;
+  }
+
+  .others ul {
+    margin: 10px 0 0;
+    padding-left: 0;
+    list-style: none;
+    display: grid;
+    gap: 6px;
+  }
+
+  .q-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .q-actions .button,
+  .results .button {
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  .q-actions .button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .results {
+    display: grid;
+    gap: 16px;
+    justify-items: start;
+  }
+
+  .score {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 800;
+  }
+
+  .breakdown {
+    width: 100%;
+    max-width: 520px;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+
+  .breakdown th {
+    text-align: left;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .breakdown th,
+  .breakdown :global(td) {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .breakdown th:last-child,
+  .breakdown :global(td:last-child) {
+    text-align: right;
+    font-family: var(--font-mono);
+    white-space: nowrap;
+    padding-left: 16px;
+  }
+
+  .breakdown :global(tr.missed td:last-child) {
+    color: var(--highlight);
+  }
+
+  @media (max-width: 600px) {
+    .stem {
+      font-size: 1rem;
+    }
+
+    .choice {
+      padding: 10px 12px;
+      gap: 12px;
+    }
+
+    .solution :global(.katex-display .katex) {
+      font-size: 1.05em;
+    }
+  }
+</style>

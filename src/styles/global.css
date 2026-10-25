@@ -16,6 +16,7 @@
   --highlight: #ff6413;
   --highlight-soft: #fff0e6;
   --force-green: #0b9b6f;
+  --force-green-soft: #e4f6ef;
   /* graph-paper lines */
   --grid: #edf2fa;
   --grid-major: #dce5f3;
@@ -47,6 +48,7 @@
   --highlight: #ff8a4a;
   --highlight-soft: #3a2316;
   --force-green: #3fd3a0;
+  --force-green-soft: #11322a;
   --grid: #131d33;
   --grid-major: #1a2846;
   --shadow: 0 10px 40px rgb(0 0 0 / 0.35);
@@ -223,6 +225,10 @@ a:hover {
   font-weight: 800;
   font-size: 1rem;
   flex-shrink: 0;
+}
+
+[hidden] {
+  display: none !important;
 }
 
 .sr-only {

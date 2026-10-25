@@ -2,7 +2,9 @@
 // One page per unit. Astro builds all 8 pages ahead of time from units.ts.
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import WeightBar from '../../components/WeightBar.astro';
+import Quiz from '../../components/Quiz.astro';
 import { units, type Unit } from '../../data/units';
+import { getUnitQuestions } from '../../lib/questions';
 import { url } from '../../site';
 
 export function getStaticPaths() {
@@ -17,6 +19,7 @@ const { unit } = Astro.props;
 const index = units.findIndex((u) => u.slug === unit.slug);
 const previous = units[index - 1];
 const next = units[index + 1];
+const questions = await getUnitQuestions(unit.number);
 ---
 
 <BaseLayout title={`Unit ${unit.number}: ${unit.title}`} description={unit.summary}>
@@ -41,11 +44,26 @@ const next = units[index + 1];
   <div class="container unit-body">
     <section id="practice" class="panel card">
       <h2>Practice questions</h2>
-      <p class="muted">
-        Practice for this unit is on the way. You'll be able to answer AP-style multiple-choice
-        questions for the whole unit or one topic at a time, with an explanation after each answer.
-      </p>
-      <span class="status">Coming soon</span>
+      {
+        questions.length > 0 ? (
+          <>
+            <p class="muted">
+              One question at a time. After each answer you'll see the worked solution and why each
+              wrong choice is wrong.
+            </p>
+            <Quiz questions={questions} topics={unit.topics} />
+          </>
+        ) : (
+          <>
+            <p class="muted">
+              Practice for this unit is on the way. You'll be able to answer AP-style multiple-choice
+              questions for the whole unit or one topic at a time, with an explanation after each
+              answer.
+            </p>
+            <span class="status">Coming soon</span>
+          </>
+        )
+      }
     </section>
 
     <section id="cheat-sheet" class="panel card">
@@ -161,6 +179,7 @@ const next = units[index + 1];
   }
 
   .panel {
+    min-width: 0;
     padding: 24px;
     scroll-margin-top: 76px;
   }
@@ -237,6 +256,10 @@ const next = units[index + 1];
   }
 
   @media (max-width: 600px) {
+    .panel {
+      padding: 20px 16px;
+    }
+
     .pager {
       grid-template-columns: 1fr;
     }

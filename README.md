@@ -25,10 +25,13 @@ Other commands:
 
 ```
 src/
+├── content/questions/    The question bank: one Markdown file per question
+├── content.config.ts     The checklist every question file must pass
+├── lib/questions.ts      Loads questions for the quiz; catches duplicates
 ├── data/units.ts         The 8 units: titles, summaries, exam weights, topics
 ├── site.ts               Site name and description
 ├── layouts/BaseLayout    Header, navigation, and footer shared by every page
-├── components/           Reusable pieces (unit cards, exam weight bars, logo)
+├── components/           Reusable pieces (the quiz, exam weight bars, logo)
 ├── pages/                One file per page; the file path becomes the web address
 │   ├── index.astro           Home page  →  /
 │   ├── units/index.astro     All units  →  /units
@@ -43,6 +46,17 @@ Common edits:
 - **Change a unit's text or topics:** edit `src/data/units.ts`. Every page updates.
 - **Change colors:** edit the variables at the top of `src/styles/global.css`. Dark mode has its own set just below.
 
+## Adding a question
+
+1. Copy any file in `src/content/questions/unit-1/`, for example `u1-001.md`.
+2. Name the copy with the next free number in that unit (`u1-006.md`) and set `id` to match.
+3. Fill in `topic`, `stem`, `choices`, `answer`, and a `why_wrong` reason for each wrong choice. Put the worked solution below the second `---`.
+4. Run `npm run check` and `npm run build`. If anything is missing or the math has a typo, they stop and name the file and the problem.
+
+Write math between `$` signs, for example `$\Delta x = \tfrac12 a t^2$`. In the part between the `---` lines, wrap text that has a backslash in single quotes (`'...'`) or put it on its own lines after `|`, because YAML treats a backslash inside double quotes as a special character.
+
+A graph or diagram goes in the unit's `figures/` folder as an SVG, named in the question's `figure` field. The classes `fig-grid`, `fig-axis`, `fig-line`, `fig-point`, `fig-label`, and `fig-title` give it the site's colors in light and dark mode.
+
 ## Deploying
 
 The site is static, so it can be hosted free.
@@ -55,7 +69,7 @@ The site is static, so it can be hosted free.
 ## Roadmap
 
 1. Site skeleton: home, unit list, and unit pages (done)
-2. Practice engine: questions stored as files, instant feedback, explanations, equations with KaTeX
+2. Practice engine: questions stored as files, instant feedback, explanations, equations with KaTeX (started: Unit 1 has five sample questions)
 3. Content: a cheat sheet for each unit and original questions, starting with Units 1 and 2
 4. Visuals: interactive force diagrams and motion graphs
 5. Later: progress tracking
