@@ -1,14 +1,13 @@
 ---
-// Free-body diagram of a block sliding down a ramp: gravity, the normal force,
-// and kinetic friction, with the net-force equations beside it. Coordinates are
-// worked out for a ramp angle of about 26.6°.
+// Free-body diagram of a block resting on a ramp: gravity, the normal force, and
+// static friction. Coordinates are worked out for a ramp angle of about 26.6°.
 ---
 
 <figure class="figure">
   <svg
-    viewBox="28 66 404 248"
+    viewBox="0 0 460 320"
     role="img"
-    aria-label="Free-body diagram of a block sliding down a ramp, with arrows for gravity, the normal force, and kinetic friction"
+    aria-label="Free-body diagram of a block resting on a ramp, with arrows for gravity, the normal force, and static friction"
   >
     <defs>
       <marker id="head-gravity" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
@@ -38,16 +37,11 @@
 
     <text x="250" y="276" fill="var(--highlight)">F<tspan font-size="11" dy="4">g</tspan></text>
     <text x="160" y="92" fill="var(--accent)">F<tspan font-size="11" dy="4">N</tspan></text>
-    <text x="304" y="136" fill="var(--force-green)">f<tspan font-size="11" dy="4">k</tspan></text>
+    <text x="304" y="136" fill="var(--force-green)">f<tspan font-size="11" dy="4">s</tspan></text>
   </svg>
-  <div class="equations">
-    <div class="eq"><span>F<sub>N</sub> = F<sub>g</sub> cos θ</span></div>
-    <div class="eq"><span>f<sub>k</sub> = μ<sub>k</sub>F<sub>N</sub></span></div>
-    <div class="eq key"><span>F<sub>net</sub> = F<sub>g</sub> sin θ − μ<sub>k</sub>F<sub>g</sub> cos θ</span></div>
-  </div>
   <figcaption>
     <span>Unit 2 · Forces and Free-Body Diagrams</span>
-    <span>block sliding down a ramp</span>
+    <span>block at rest on a ramp</span>
   </figcaption>
 </figure>
 
@@ -101,34 +95,6 @@
     }
   }
 
-  .equations {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 6px 20px;
-    margin-top: 8px;
-    padding: 10px 0 8px;
-    border-top: 1px dashed var(--border);
-    font-family: var(--font-mono);
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--text);
-  }
-
-  .eq {
-    white-space: nowrap;
-  }
-
-  .eq sub {
-    font-size: 0.65rem;
-  }
-
-  .eq.key {
-    flex-basis: 100%;
-    font-size: 1rem;
-    color: var(--highlight);
-  }
-
   figcaption {
     display: flex;
     justify-content: space-between;
@@ -149,23 +115,14 @@
       max-height: 28vh;
     }
 
-    figcaption span:last-child,
-    .eq:not(.key) {
+    figcaption span:last-child {
       display: none;
-    }
-
-    .equations {
-      padding: 6px 0 2px;
-    }
-
-    .eq.key {
-      font-size: 0.8rem;
     }
   }
 
   @media (max-width: 900px) and (max-height: 760px) {
     svg {
-      max-height: 20vh;
+      max-height: 22vh;
     }
 
     figcaption {
