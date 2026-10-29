@@ -59,7 +59,7 @@ Common edits:
 
 Write math between `$` signs, for example `$\Delta x = \tfrac12 a t^2$`. In the part between the `---` lines, wrap text that has a backslash in single quotes (`'...'`) or put it on its own lines after `|`, because YAML treats a backslash inside double quotes as a special character.
 
-A graph or diagram goes in the unit's `figures/` folder as an SVG, named in the question's `figure` field. The classes `fig-grid`, `fig-axis`, `fig-line`, `fig-point`, `fig-label`, and `fig-title` give it the site's colors in light and dark mode.
+A graph or diagram goes in the unit's `figures/` folder as an SVG, named in the question's `figure` field. The classes `fig-grid`, `fig-axis`, `fig-line`, `fig-point`, `fig-label`, and `fig-title` (for graphs) and `fig-fill`, `fig-arrow`, `fig-arrowhead`, and `fig-dash` (for objects, force arrows, and guide lines) give it the site's colors in light and dark mode.
 
 ## Deploying
 
@@ -73,7 +73,7 @@ The site is static, so it can be hosted free.
 ## Roadmap
 
 1. Site skeleton: home, unit list, and unit pages (done)
-2. Practice engine: questions stored as files, instant feedback, explanations, equations with KaTeX (started: Unit 1 has an exam-style practice page with ten sample questions and a built-in scientific calculator)
+2. Practice engine: questions stored as files, instant feedback, explanations, equations with KaTeX (started: every unit has an exam-style practice page, 98 questions in all, with a built-in scientific calculator and an equation sheet)
 3. Content: a cheat sheet for each unit and original questions, starting with Units 1 and 2
 4. Visuals: interactive force diagrams and motion graphs
 5. Later: progress tracking

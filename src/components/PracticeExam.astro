@@ -754,6 +754,31 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
     font-size: 12px;
   }
 
+  .figure :global(.fig-fill) {
+    fill: var(--accent-soft);
+    stroke: var(--text);
+    stroke-width: 1.5;
+  }
+
+  .figure :global(.fig-arrow) {
+    fill: none;
+    stroke: var(--force-green);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+  }
+
+  .figure :global(.fig-arrowhead) {
+    fill: var(--force-green);
+    stroke: none;
+  }
+
+  .figure :global(.fig-dash) {
+    fill: none;
+    stroke: var(--text-muted);
+    stroke-width: 1.2;
+    stroke-dasharray: 5 4;
+  }
+
   .choices {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
@@ -962,6 +987,32 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
     overflow-x: auto;
     overflow-y: hidden;
     padding: 4px 0;
+  }
+
+  .solution :global(table) {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    margin: 0 0 1em;
+    border-collapse: collapse;
+  }
+
+  .solution :global(th),
+  .solution :global(td) {
+    padding: 6px 14px 6px 0;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+  }
+
+  .solution :global(th) {
+    font-size: 0.85em;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 480px) {
+    .solution :global(.katex-display > .katex) {
+      font-size: 1em;
+    }
   }
 
   /* ---------- results ---------- */

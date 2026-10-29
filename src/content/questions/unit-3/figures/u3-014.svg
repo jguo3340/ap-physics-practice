@@ -1,0 +1,63 @@
+<svg viewBox="0 0 360 312" role="img" aria-label="Four graphs of force F in newtons against position x in meters, each from 0 to 4 m. Graph 1: constant 4 N. Graph 2: 12 N from 0 to 1 m, then zero. Graph 3: 6 N from 0 to 3 m, then zero. Graph 4: rises in a straight line from 0 at x = 0 to 10 N at 2 m, then falls back to 0 at 4 m." xmlns="http://www.w3.org/2000/svg">
+  <g class="fig-grid">
+    <path d="M71.5 28V118M103 28V118M134.5 28V118M166 28V118M40 103H166M40 88H166M40 73H166M40 58H166M40 43H166M40 28H166" />
+  </g>
+  <g class="fig-axis"><path d="M40 118H172" /><path d="M40 118V22" /></g>
+  <g class="fig-label">
+    <text x="40" y="132" text-anchor="middle">0</text>
+    <text x="103" y="132" text-anchor="middle">2</text>
+    <text x="166" y="132" text-anchor="middle">4</text>
+    <text x="34" y="122" text-anchor="end">0</text>
+    <text x="34" y="77" text-anchor="end">6</text>
+    <text x="34" y="32" text-anchor="end">12</text>
+  </g>
+  <text class="fig-title" x="103" y="14" text-anchor="middle">Graph 1</text>
+  <polyline class="fig-line" style="stroke-width:2.5" points="40,88 166,88" />
+  <g class="fig-grid">
+    <path d="M253.5 28V118M285 28V118M316.5 28V118M348 28V118M222 103H348M222 88H348M222 73H348M222 58H348M222 43H348M222 28H348" />
+  </g>
+  <g class="fig-axis"><path d="M222 118H354" /><path d="M222 118V22" /></g>
+  <g class="fig-label">
+    <text x="222" y="132" text-anchor="middle">0</text>
+    <text x="285" y="132" text-anchor="middle">2</text>
+    <text x="348" y="132" text-anchor="middle">4</text>
+    <text x="216" y="122" text-anchor="end">0</text>
+    <text x="216" y="77" text-anchor="end">6</text>
+    <text x="216" y="32" text-anchor="end">12</text>
+  </g>
+  <text class="fig-title" x="285" y="14" text-anchor="middle">Graph 2</text>
+  <path class="fig-dash" d="M253.5 28V118" />
+  <polyline class="fig-line" style="stroke-width:2.5" points="222,28 253.5,28" />
+  <polyline class="fig-line" style="stroke-width:2.5" points="253.5,118 348,118" />
+  <g class="fig-grid">
+    <path d="M71.5 174V264M103 174V264M134.5 174V264M166 174V264M40 249H166M40 234H166M40 219H166M40 204H166M40 189H166M40 174H166" />
+  </g>
+  <g class="fig-axis"><path d="M40 264H172" /><path d="M40 264V168" /></g>
+  <g class="fig-label">
+    <text x="40" y="278" text-anchor="middle">0</text>
+    <text x="103" y="278" text-anchor="middle">2</text>
+    <text x="166" y="278" text-anchor="middle">4</text>
+    <text x="34" y="268" text-anchor="end">0</text>
+    <text x="34" y="223" text-anchor="end">6</text>
+    <text x="34" y="178" text-anchor="end">12</text>
+  </g>
+  <text class="fig-title" x="103" y="160" text-anchor="middle">Graph 3</text>
+  <path class="fig-dash" d="M134.5 219V264" />
+  <polyline class="fig-line" style="stroke-width:2.5" points="40,219 134.5,219" />
+  <polyline class="fig-line" style="stroke-width:2.5" points="134.5,264 166,264" />
+  <g class="fig-grid">
+    <path d="M253.5 174V264M285 174V264M316.5 174V264M348 174V264M222 249H348M222 234H348M222 219H348M222 204H348M222 189H348M222 174H348" />
+  </g>
+  <g class="fig-axis"><path d="M222 264H354" /><path d="M222 264V168" /></g>
+  <g class="fig-label">
+    <text x="222" y="278" text-anchor="middle">0</text>
+    <text x="285" y="278" text-anchor="middle">2</text>
+    <text x="348" y="278" text-anchor="middle">4</text>
+    <text x="216" y="268" text-anchor="end">0</text>
+    <text x="216" y="223" text-anchor="end">6</text>
+    <text x="216" y="178" text-anchor="end">12</text>
+  </g>
+  <text class="fig-title" x="285" y="160" text-anchor="middle">Graph 4</text>
+  <polyline class="fig-line" style="stroke-width:2.5" points="222,264 285,189 348,264" />
+  <text class="fig-label" x="180" y="304" text-anchor="middle">Force F (N) against position x (m)</text>
+</svg>

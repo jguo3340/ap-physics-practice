@@ -1,0 +1,12 @@
+<svg viewBox="0 30 360 160" role="img" aria-label="A block of mass m on a ramp inclined at angle theta above the horizontal. A horizontal force F pushes the block from the left, toward the ramp." xmlns="http://www.w3.org/2000/svg">
+  <path class="fig-axis" d="M40 175H300.0V53.8Z" />
+  <g transform="translate(175.9 111.6) rotate(-25.00)">
+    <rect class="fig-fill" x="-20" y="-28" width="40" height="28" />
+    <text class="fig-title" x="0" y="-10" text-anchor="middle">m</text>
+  </g>
+  <path class="fig-arrow" d="M87.0 98.9H140.0" />
+  <path class="fig-arrowhead" d="M149.0 98.9L138.0 93.4V104.4Z" />
+  <text class="fig-title" x="113.0" y="88.9" text-anchor="middle">F</text>
+  <path class="fig-axis" style="stroke-width:1.2" d="M80 175A40 40 0 0 0 76.3 158.1" />
+  <text class="fig-title" x="88" y="169">θ</text>
+</svg>

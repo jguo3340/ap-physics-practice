@@ -1,0 +1,27 @@
+<svg viewBox="0 0 360 232" role="img" aria-label="Position-time graph from 0 to 4 s. The position rises in a straight line from 0 at t = 0 to 4 m at 2 s, then falls in a straight line to −2 m at 4 s." xmlns="http://www.w3.org/2000/svg">
+  <g class="fig-grid">
+    <path d="M56 26V186M89.75 26V186M123.5 26V186M157.25 26V186M191 26V186M224.75 26V186M258.5 26V186M292.25 26V186M326 26V186" />
+    <path d="M56 186H326M56 166H326M56 146H326M56 126H326M56 86H326M56 66H326M56 46H326M56 26H326" />
+  </g>
+  <g class="fig-axis">
+    <path d="M56 106H336" />
+    <path d="M56 186V18" />
+  </g>
+  <g class="fig-label">
+    <text x="56" y="203" text-anchor="middle">0</text>
+    <text x="123.5" y="203" text-anchor="middle">1</text>
+    <text x="191" y="203" text-anchor="middle">2</text>
+    <text x="258.5" y="203" text-anchor="middle">3</text>
+    <text x="326" y="203" text-anchor="middle">4</text>
+    <text x="46" y="30" text-anchor="end">4</text>
+    <text x="46" y="70" text-anchor="end">2</text>
+    <text x="46" y="110" text-anchor="end">0</text>
+    <text x="46" y="150" text-anchor="end">−2</text>
+    <text x="46" y="190" text-anchor="end">−4</text>
+  </g>
+  <g class="fig-title">
+    <text x="191" y="225" text-anchor="middle">time, t (s)</text>
+    <text x="14" y="106" text-anchor="middle" transform="rotate(-90 14 106)">position, x (m)</text>
+  </g>
+  <polyline class="fig-line" points="56,106 191,26 326,146" />
+</svg>

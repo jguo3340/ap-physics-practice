@@ -1,0 +1,20 @@
+<svg viewBox="0 36 360 124" role="img" aria-label="A box slides up a straight ramp. At the bottom its speed is 8.0 m/s up the ramp. At a point 1.5 m higher, measured vertically, its speed is 2.0 m/s." xmlns="http://www.w3.org/2000/svg">
+  <path class="fig-axis" d="M14 150H300" />
+  <path class="fig-axis" d="M30 150L280 72V150" />
+  <g transform="translate(64.4 139.3) rotate(-17.33)">
+    <rect class="fig-fill" x="-14" y="-22" width="28" height="22" />
+    <path class="fig-arrow" d="M18 -11H50" />
+    <path class="fig-arrowhead" d="M58 -11L48 -16V-6Z" />
+  </g>
+  <g transform="translate(226.7 88.6) rotate(-17.33)">
+    <rect class="fig-fill" x="-14" y="-22" width="28" height="22" />
+    <path class="fig-arrow" d="M18 -11H50" />
+    <path class="fig-arrowhead" d="M58 -11L48 -16V-6Z" />
+  </g>
+  <text class="fig-label" x="94" y="105">8.0 m/s</text>
+  <text class="fig-label" x="249" y="55" text-anchor="middle">2.0 m/s</text>
+  <path class="fig-dash" d="M226.7 88.6H318" />
+  <path class="fig-dash" d="M64.4 139.3H318" />
+  <path class="fig-axis" style="stroke-width:1.2" d="M306 94.6V133.3M302 94.6L306 88.6L310 94.6M302 133.3L306 139.3L310 133.3" />
+  <text class="fig-title" x="314" y="118">1.5 m</text>
+</svg>

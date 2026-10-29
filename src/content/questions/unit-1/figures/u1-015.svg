@@ -1,0 +1,48 @@
+<svg viewBox="0 0 360 416" role="img" aria-label="Four rows of graph pairs, horizontal velocity on the left and vertical velocity on the right, each with a dashed line at t1. Row 1: v_x constant the whole time; v_y decreases in a straight line with no jump. Row 2: v_x constant until t1, then reverses to the same size in the opposite direction; v_y decreases in a straight line with no jump. Row 3: v_x constant the whole time; v_y decreases in a straight line, then jumps from a positive value to the same size negative at t1. Row 4: v_x reverses at t1; v_y also jumps from positive to negative at t1." xmlns="http://www.w3.org/2000/svg">
+  <text class="fig-title" x="130" y="22" text-anchor="middle">horizontal, v<tspan font-size="9" dy="3">x</tspan></text>
+  <text class="fig-title" x="290" y="22" text-anchor="middle">vertical, v<tspan font-size="9" dy="3">y</tspan></text>
+  <g class="fig-axis"><path d="M70 44V114" /><path d="M70 79H190" /></g>
+  <path class="fig-grid" d="M125 44V114" stroke-dasharray="4 4" />
+  <text class="fig-label" x="125" y="126" text-anchor="middle">t₁</text>
+  <text class="fig-label" x="64" y="83" text-anchor="end">0</text>
+  <path class="fig-line" d="M70 59H180" />
+  <g class="fig-axis"><path d="M230 44V114" /><path d="M230 79H350" /></g>
+  <path class="fig-grid" d="M285 44V114" stroke-dasharray="4 4" />
+  <text class="fig-label" x="285" y="126" text-anchor="middle">t₁</text>
+  <text class="fig-label" x="224" y="83" text-anchor="end">0</text>
+  <path class="fig-line" d="M230 49L340 93" />
+  <text class="fig-title" x="14" y="84">1</text>
+  <g class="fig-axis"><path d="M70 136V206" /><path d="M70 171H190" /></g>
+  <path class="fig-grid" d="M125 136V206" stroke-dasharray="4 4" />
+  <text class="fig-label" x="125" y="218" text-anchor="middle">t₁</text>
+  <text class="fig-label" x="64" y="175" text-anchor="end">0</text>
+  <path class="fig-line" d="M70 151H125M125 191H180" />
+  <g class="fig-axis"><path d="M230 136V206" /><path d="M230 171H350" /></g>
+  <path class="fig-grid" d="M285 136V206" stroke-dasharray="4 4" />
+  <text class="fig-label" x="285" y="218" text-anchor="middle">t₁</text>
+  <text class="fig-label" x="224" y="175" text-anchor="end">0</text>
+  <path class="fig-line" d="M230 141L340 185" />
+  <text class="fig-title" x="14" y="176">2</text>
+  <g class="fig-axis"><path d="M70 228V298" /><path d="M70 263H190" /></g>
+  <path class="fig-grid" d="M125 228V298" stroke-dasharray="4 4" />
+  <text class="fig-label" x="125" y="310" text-anchor="middle">t₁</text>
+  <text class="fig-label" x="64" y="267" text-anchor="end">0</text>
+  <path class="fig-line" d="M70 243H180" />
+  <g class="fig-axis"><path d="M230 228V298" /><path d="M230 263H350" /></g>
+  <path class="fig-grid" d="M285 228V298" stroke-dasharray="4 4" />
+  <text class="fig-label" x="285" y="310" text-anchor="middle">t₁</text>
+  <text class="fig-label" x="224" y="267" text-anchor="end">0</text>
+  <path class="fig-line" d="M230 233L285 255M285 271L340 293" />
+  <text class="fig-title" x="14" y="268">3</text>
+  <g class="fig-axis"><path d="M70 320V390" /><path d="M70 355H190" /></g>
+  <path class="fig-grid" d="M125 320V390" stroke-dasharray="4 4" />
+  <text class="fig-label" x="125" y="402" text-anchor="middle">t₁</text>
+  <text class="fig-label" x="64" y="359" text-anchor="end">0</text>
+  <path class="fig-line" d="M70 335H125M125 375H180" />
+  <g class="fig-axis"><path d="M230 320V390" /><path d="M230 355H350" /></g>
+  <path class="fig-grid" d="M285 320V390" stroke-dasharray="4 4" />
+  <text class="fig-label" x="285" y="402" text-anchor="middle">t₁</text>
+  <text class="fig-label" x="224" y="359" text-anchor="end">0</text>
+  <path class="fig-line" d="M230 325L285 347M285 363L340 385" />
+  <text class="fig-title" x="14" y="360">4</text>
+</svg>
