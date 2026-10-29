@@ -85,8 +85,8 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
     <h2>Directions</h2>
     <p>
       Choose the best answer to each question, then press <strong>Next</strong>. Mark a question to come back to it,
-      and use the question menu at the bottom to jump around. The timer runs at exam pace: {multipleChoice.minutes}
-      minutes for {multipleChoice.questions} questions.
+      and use the question menu at the bottom to jump around. The timer runs at exam pace ({multipleChoice.minutes}
+      minutes for {multipleChoice.questions} questions), so a shorter set gets less time.
     </p>
     <p>
       Turn on <strong>Check as I go</strong> to see the worked solution after each question. Otherwise your score
@@ -136,6 +136,19 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
   </div>
 
   <main id="main" class="exam-main">
+    <section class="setup" data-setup aria-labelledby="setup-title" hidden>
+      <p class="small-label" data-setup-topic>All topics</p>
+      <h1 id="setup-title" tabindex="-1">How many questions?</h1>
+      <div class="count-options" role="radiogroup" aria-labelledby="setup-title" data-count-options></div>
+      <label class="count-custom">
+        Or type a number
+        <input type="number" min="1" step="1" inputmode="numeric" data-count-input />
+        <span data-count-of></span>
+      </label>
+      <p class="setup-note" data-setup-note></p>
+      <button type="button" class="button button-primary begin-button" data-begin>Start</button>
+    </section>
+
     {
       items.map((q) => (
         <article class="question" data-question data-id={q.id} data-topic={q.topic} data-answer={q.entry.data.answer} hidden>
@@ -190,6 +203,7 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
         </div>
         <div class="results-actions">
           <button type="button" class="button button-primary" data-restart>Try again</button>
+          <button type="button" class="button button-secondary" data-new-set>New set</button>
           <a class="button button-secondary" href={unitUrl}>Back to Unit {unit.number}</a>
         </div>
       </div>
@@ -1309,8 +1323,130 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
   }
 
   .exam.is-finished .question-bar,
-  .exam.is-finished .exam-footer {
+  .exam.is-finished .exam-footer,
+  .exam.is-setup .question-bar,
+  .exam.is-setup .exam-footer {
     display: none;
+  }
+
+  /* ---------- choosing a set ---------- */
+
+  .setup {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+    max-width: 560px;
+  }
+
+  .setup .small-label {
+    margin: 0;
+  }
+
+  .setup h1 {
+    margin: 0;
+    font-size: clamp(1.8rem, 6vw, 2.4rem);
+  }
+
+  .setup h1:focus {
+    outline: none;
+  }
+
+  .count-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+    gap: 10px;
+  }
+
+  @media (max-width: 480px) {
+    .count-options {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .count-options :global(.count-option) {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 64px;
+    padding: 10px 12px;
+    border: 1px solid var(--text-muted);
+    border-radius: 10px;
+    background: var(--surface);
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .count-options :global(.count-option:hover) {
+    border-color: var(--accent);
+  }
+
+  .count-options :global(.count-option input) {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .count-options :global(.count-option:has(input:focus-visible)) {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .count-options :global(.count-option:has(input:checked)) {
+    border: 2px solid var(--accent);
+    padding: 9px 11px;
+    background: var(--accent-soft);
+  }
+
+  .count-options :global(.count-number) {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  .count-options :global(.count-word) {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .count-custom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-muted);
+  }
+
+  .count-custom input {
+    width: 5.5em;
+    min-height: 44px;
+    padding: 8px 12px;
+    border: 1px solid var(--text-muted);
+    border-radius: 10px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+  }
+
+  .count-custom input:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .count-custom input[aria-invalid='true'] {
+    border-color: var(--highlight);
+  }
+
+  .setup-note {
+    margin: 0;
+  }
+
+  .begin-button {
+    justify-self: start;
+    min-width: 160px;
+    min-height: 48px;
+    border-radius: 99px;
+    font-size: 1rem;
   }
 
   /* ---------- phones ---------- */

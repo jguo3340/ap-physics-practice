@@ -10,6 +10,8 @@ interface QuestionState {
 }
 
 const CHECK_KEY = 'practice-check-as-you-go';
+const COUNT_KEY = 'practice-question-count';
+const COUNT_PRESETS = [5, 10, 20];
 
 function readSetting(key: string) {
   try {
@@ -32,6 +34,16 @@ const formatTime = (seconds: number) => {
   const s = seconds % 60;
   return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
 };
+
+// A random order, so a short set draws different questions each time.
+function shuffled<T>(items: T[]) {
+  const copy = [...items];
+  for (let i = copy.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
 
 const svg = (className: string, path: string) =>
   `<svg class="${className}" viewBox="0 0 24 24" aria-hidden="true"><path d="${path}"></path></svg>`;
@@ -64,7 +76,16 @@ export function setUpPractice(exam: HTMLElement) {
   const back = $<HTMLButtonElement>('[data-back]');
   const next = $<HTMLButtonElement>('[data-next]');
   const results = $('[data-results]');
+  const setup = $('[data-setup]');
+  const setupTopic = $('[data-setup-topic]');
+  const countOptions = $('[data-count-options]');
+  const countInput = $<HTMLInputElement>('[data-count-input]');
+  const countOf = $('[data-count-of]');
+  const setupNote = $('[data-setup-note]');
+  const begin = $<HTMLButtonElement>('[data-begin]');
 
+  let pool: HTMLElement[] = [];
+  let poolLabel = 'All topics';
   let deck: HTMLElement[] = [];
   let index = 0;
   let states = new Map<string, QuestionState>();
@@ -354,36 +375,147 @@ export function setUpPractice(exam: HTMLElement) {
     score.focus();
   }
 
-  // ---------- starting a set ----------
+  // ---------- choosing a set ----------
 
   function topicFromHash() {
     const match = /^#topic-(\d+\.\d+)$/.exec(location.hash);
     return match ? match[1] : null;
   }
 
-  function start() {
+  // The number of questions picked on the setup screen, or null if the typed
+  // number is not usable.
+  function chosenCount() {
+    const typed = countInput.value.trim();
+    if (typed) {
+      const n = Number(typed);
+      return Number.isInteger(n) && n >= 1 && n <= pool.length ? n : null;
+    }
+    const picked = countOptions.querySelector<HTMLInputElement>('input:checked');
+    return picked ? Number(picked.value) : pool.length;
+  }
+
+  function renderSetupNote() {
+    const n = chosenCount();
+    countInput.setAttribute('aria-invalid', String(n === null));
+    begin.disabled = n === null;
+    if (n === null) {
+      setupNote.textContent = `Type a whole number from 1 to ${pool.length}.`;
+      return;
+    }
+    const minutes = Math.max(1, Math.round((n * pace) / 60));
+    const which =
+      n === pool.length
+        ? `All ${n} question${n === 1 ? '' : 's'}`
+        : `${n} question${n === 1 ? '' : 's'} picked at random from ${pool.length}`;
+    setupNote.textContent = `${which}, about ${minutes} minute${minutes === 1 ? '' : 's'} at exam pace.`;
+    remaining = Math.round(n * pace);
+    renderClock();
+  }
+
+  function countChoice(value: number, number: string, word: string, checked: boolean) {
+    const label = document.createElement('label');
+    label.className = 'count-option';
+    const input = document.createElement('input');
+    input.type = 'radio';
+    input.name = 'question-count';
+    input.value = String(value);
+    input.checked = checked;
+    input.addEventListener('change', () => {
+      countInput.value = '';
+      renderSetupNote();
+    });
+    const big = document.createElement('span');
+    big.className = 'count-number';
+    big.textContent = number;
+    const small = document.createElement('span');
+    small.className = 'count-word';
+    small.textContent = word;
+    label.append(input, big, small);
+    return label;
+  }
+
+  function showSetup() {
+    window.clearInterval(tick);
+    closeAll();
     const topic = topicFromHash();
     const filtered = topic ? all.filter((q) => q.dataset.topic === topic) : [];
-    deck = filtered.length ? filtered : all;
-    const label = filtered.length ? `Topic ${topicNames[topic!] ?? topic}` : 'All topics';
-    deckLabel.textContent = `${label} · ${deck.length} question${deck.length === 1 ? '' : 's'}`;
+    pool = filtered.length ? filtered : all;
+    poolLabel = filtered.length ? `Topic ${topicNames[topic!] ?? topic}` : 'All topics';
     allLink.hidden = !filtered.length;
+    deckLabel.textContent = `${poolLabel} · ${pool.length} question${pool.length === 1 ? '' : 's'}`;
+    setupTopic.textContent = deckLabel.textContent;
 
+    const saved = readSetting(COUNT_KEY);
+    const presets = COUNT_PRESETS.filter((n) => n < pool.length);
+    const savedNumber = Number(saved);
+    const custom = saved !== 'all' && Number.isInteger(savedNumber) && savedNumber >= 1 && savedNumber < pool.length && !presets.includes(savedNumber);
+    countOptions.replaceChildren(
+      ...presets.map((n) => countChoice(n, String(n), 'questions', String(n) === saved)),
+      countChoice(pool.length, 'All', `${pool.length} question${pool.length === 1 ? '' : 's'}`, !presets.some((n) => String(n) === saved) && !custom),
+    );
+    countInput.max = String(pool.length);
+    countInput.value = custom ? String(savedNumber) : '';
+    countOf.textContent = `of ${pool.length}`;
+
+    for (const q of all) q.hidden = true;
+    exam.classList.remove('is-finished');
+    exam.classList.add('is-setup');
+    results.hidden = true;
+    setup.hidden = false;
+    renderSetupNote();
+    window.scrollTo({ top: 0 });
+  }
+
+  countInput.addEventListener('input', () => {
+    if (countInput.value.trim()) {
+      for (const input of countOptions.querySelectorAll<HTMLInputElement>('input')) input.checked = false;
+    } else {
+      const choices = countOptions.querySelectorAll<HTMLInputElement>('input');
+      choices[choices.length - 1].checked = true;
+    }
+    renderSetupNote();
+  });
+
+  countInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' && !begin.disabled) begin.click();
+  });
+
+  // ---------- starting a set ----------
+
+  function start(questions: HTMLElement[]) {
+    deck = questions;
+    const label = deck.length === pool.length ? `${deck.length}` : `${deck.length} of ${pool.length}`;
+    deckLabel.textContent = `${poolLabel} · ${label} question${pool.length === 1 ? '' : 's'}`;
     states = new Map(all.map((q) => [q.dataset.id!, { crossed: new Set(), marked: false, checked: false }]));
     all.forEach(resetQuestion);
-    exam.classList.remove('is-finished');
+    exam.classList.remove('is-finished', 'is-setup');
+    setup.hidden = true;
     results.hidden = true;
     closeAll();
     startTimer();
     show(0);
   }
 
-  $('[data-restart]').addEventListener('click', () => {
-    start();
-    deck[0].querySelector('input')?.focus();
+  begin.addEventListener('click', () => {
+    const n = chosenCount();
+    if (n === null) return;
+    writeSetting(COUNT_KEY, n === pool.length && !countInput.value.trim() ? 'all' : String(n));
+    start(n >= pool.length ? pool : shuffled(pool).slice(0, n));
+    deck[0].querySelector('input')?.focus({ preventScroll: true });
   });
-  window.addEventListener('hashchange', start);
+
+  $('[data-restart]').addEventListener('click', () => {
+    start(deck);
+    deck[0].querySelector('input')?.focus({ preventScroll: true });
+  });
+
+  $('[data-new-set]').addEventListener('click', () => {
+    showSetup();
+    $('#setup-title').focus();
+  });
+
+  window.addEventListener('hashchange', showSetup);
 
   renderSwitch();
-  start();
+  showSetup();
 }
