@@ -1,0 +1,32 @@
+---
+// The practice page for a unit, at /units/<unit>/practice. Only units that
+// have published questions get one.
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PracticeExam from '../../../components/PracticeExam.astro';
+import { units, type Unit } from '../../../data/units';
+import { getUnitQuestions, type PreparedQuestion } from '../../../lib/questions';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const unit of units) {
+    const questions = await getUnitQuestions(unit.number);
+    if (questions.length > 0) paths.push({ params: { slug: unit.slug }, props: { unit, questions } });
+  }
+  return paths;
+}
+
+interface Props {
+  unit: Unit;
+  questions: PreparedQuestion[];
+}
+
+const { unit, questions } = Astro.props;
+---
+
+<BaseLayout
+  title={`Practice: Unit ${unit.number} ${unit.title}`}
+  description={`Exam-style multiple-choice practice for Unit ${unit.number}: ${unit.title}.`}
+  bare
+>
+  <PracticeExam unit={unit} questions={questions} />
+</BaseLayout>

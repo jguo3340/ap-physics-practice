@@ -1,0 +1,31 @@
+<svg viewBox="0 0 260 236" role="img" aria-label="A disk of radius R with its center marked, and a dashed circle of radius R/2. F1, of size F, acts at the top of the rim, pointing left along the rim (counterclockwise). F2, of size 2F, acts on the dashed circle directly right of the center, pointing straight down (clockwise); its arrow is twice as long. F3, of size 2F, acts on the rim at the lower left and points straight outward from the center. F4, of size F, acts at the leftmost point of the rim, pointing outward and downward at 30 degrees from the radius line." xmlns="http://www.w3.org/2000/svg">
+  <circle class="fig-fill" cx="140" cy="118" r="80" />
+  <g class="fig-dash">
+    <circle cx="140" cy="118" r="40" />
+    <path d="M60 118H26" />
+  </g>
+  <g class="fig-axis" style="stroke-width:1">
+    <path d="M140 118L196.6 61.4" />
+    <path d="M140 118H180" />
+  </g>
+  <circle class="fig-point" cx="140" cy="118" r="3" />
+  <path class="fig-arrow" d="M140.0 38.0L117.0 38.0" />
+  <polygon class="fig-arrowhead" points="108.0,38.0 117.0,33.5 117.0,42.5" />
+  <path class="fig-arrow" d="M180.0 118.0L180.0 173.0" />
+  <polygon class="fig-arrowhead" points="180.0,182.0 175.5,173.0 184.5,173.0" />
+  <path class="fig-arrow" d="M83.4 174.6L44.5 213.5" />
+  <polygon class="fig-arrowhead" points="38.2,219.8 41.4,210.3 47.7,216.6" />
+  <path class="fig-arrow" d="M60.0 118.0L40.1 129.5" />
+  <polygon class="fig-arrowhead" points="32.3,134.0 37.8,125.6 42.3,133.4" />
+  <g class="fig-title">
+    <text x="110" y="30">F₁</text>
+    <text x="187.0" y="176">F₂</text>
+    <text x="31" y="205" text-anchor="end">F₃</text>
+    <text x="30" y="150" text-anchor="middle">F₄</text>
+  </g>
+  <g class="fig-label">
+    <text x="186" y="90">R</text>
+    <text x="160" y="134" text-anchor="middle">R/2</text>
+    <text x="32" y="113">30°</text>
+  </g>
+</svg>

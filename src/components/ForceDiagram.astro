@@ -1,0 +1,139 @@
+---
+// Free-body diagram of a block resting on a ramp: gravity, the normal force, and
+// static friction. Coordinates are worked out for a ramp angle of about 26.6°.
+---
+
+<figure class="figure">
+  <svg
+    viewBox="0 0 460 320"
+    role="img"
+    aria-label="Free-body diagram of a block resting on a ramp, with arrows for gravity, the normal force, and static friction"
+  >
+    <defs>
+      <marker id="head-gravity" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M0 0 10 5 0 10Z" fill="var(--highlight)"></path>
+      </marker>
+      <marker id="head-normal" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M0 0 10 5 0 10Z" fill="var(--accent)"></path>
+      </marker>
+      <marker id="head-friction" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M0 0 10 5 0 10Z" fill="var(--force-green)"></path>
+      </marker>
+    </defs>
+
+    <!-- ramp and its angle -->
+    <path d="M40 300 L420 300 L420 110 Z" fill="var(--surface-2)" stroke="var(--text)" stroke-width="2" stroke-linejoin="round"></path>
+    <path d="M92 300 A52 52 0 0 0 86.5 277" fill="none" stroke="var(--text-muted)" stroke-width="1.5"></path>
+    <text x="100" y="292" fill="var(--text-muted)">θ</text>
+
+    <!-- block, rotated to sit on the ramp -->
+    <rect x="214" y="145.5" width="70" height="50" rx="4" fill="var(--surface)" stroke="var(--text)" stroke-width="2" transform="rotate(-26.57 249 195.5)"></rect>
+
+    <!-- force vectors from the block's center -->
+    <line class="vector" x1="237.8" y1="173.1" x2="237.8" y2="279" stroke="var(--highlight)" marker-end="url(#head-gravity)"></line>
+    <line class="vector second" x1="237.8" y1="173.1" x2="197" y2="91.5" stroke="var(--accent)" marker-end="url(#head-normal)"></line>
+    <line class="vector third" x1="237.8" y1="173.1" x2="298" y2="143" stroke="var(--force-green)" marker-end="url(#head-friction)"></line>
+    <circle cx="237.8" cy="173.1" r="4" fill="var(--text)"></circle>
+
+    <text x="250" y="276" fill="var(--highlight)">F<tspan font-size="11" dy="4">g</tspan></text>
+    <text x="160" y="92" fill="var(--accent)">F<tspan font-size="11" dy="4">N</tspan></text>
+    <text x="304" y="136" fill="var(--force-green)">f<tspan font-size="11" dy="4">s</tspan></text>
+  </svg>
+  <figcaption>
+    <span>Unit 2 · Forces and Free-Body Diagrams</span>
+    <span>block at rest on a ramp</span>
+  </figcaption>
+</figure>
+
+<style>
+  .figure {
+    margin: 0;
+    padding: 18px 18px 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+  }
+
+  svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 52vh;
+  }
+
+  text {
+    font-family: var(--font-mono);
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .vector {
+    stroke-width: 3.5;
+    stroke-dasharray: 160;
+    stroke-dashoffset: 160;
+    animation: draw 0.9s ease-out forwards;
+  }
+
+  .second {
+    animation-delay: 0.25s;
+  }
+
+  .third {
+    animation-delay: 0.5s;
+  }
+
+  @keyframes draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vector {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  figcaption {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 6px;
+    border-top: 1px dashed var(--border);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 900px) {
+    .figure {
+      padding: 10px 10px 6px;
+    }
+
+    svg {
+      max-height: 28vh;
+    }
+
+    figcaption span:last-child {
+      display: none;
+    }
+  }
+
+  @media (max-width: 900px) and (max-height: 760px) {
+    svg {
+      max-height: 22vh;
+    }
+
+    figcaption {
+      display: none;
+    }
+  }
+
+  /* Very small phones: the text and buttons take the whole screen. */
+  @media (max-width: 900px) and (max-height: 600px) {
+    .figure {
+      display: none;
+    }
+  }
+</style>

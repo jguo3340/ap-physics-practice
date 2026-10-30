@@ -1,0 +1,33 @@
+<svg viewBox="0 0 250 200" role="img" aria-label="A spring hangs from the ceiling at point S. An object hangs at rest at point E, a distance d directly below S. Point P is a distance d to the right of E, at the same height. Point Q is a distance d/2 directly below E. Point R is a distance d to the right of Q, so it is d to the right of E and d/2 below it." xmlns="http://www.w3.org/2000/svg">
+  <g class="fig-axis">
+    <path d="M60 20H140" />
+    <path d="M66 20l-8 -8M80 20l-8 -8M94 20l-8 -8M108 20l-8 -8M122 20l-8 -8M136 20l-8 -8" style="stroke-width:1" />
+  </g>
+  <g class="fig-grid">
+    <path d="M109 110H188V154H100V119" />
+  </g>
+  <polyline class="fig-line" style="stroke-width:2" points="100,20 100,30 92,33 108,39 92,45 108,51 92,57 108,63 92,69 108,75 92,81 108,87 100,93 100,101" />
+  <circle class="fig-fill" cx="100" cy="110" r="9" />
+  <g class="fig-dash">
+    <path d="M52 20V110M48 20H56M48 110H56" />
+    <path d="M52 110V154M48 154H56" />
+    <path d="M100 176H188M100 172V180M188 172V180" />
+  </g>
+  <g class="fig-point">
+    <circle cx="188" cy="110" r="4" />
+    <circle cx="100" cy="154" r="4" />
+    <circle cx="188" cy="154" r="4" />
+  </g>
+  <g class="fig-title">
+    <text x="108" y="36">S</text>
+    <text x="80" y="115" text-anchor="middle">E</text>
+    <text x="198" y="114">P</text>
+    <text x="88" y="158" text-anchor="middle">Q</text>
+    <text x="198" y="158">R</text>
+  </g>
+  <g class="fig-label">
+    <text x="42" y="69" text-anchor="end">d</text>
+    <text x="42" y="136" text-anchor="end">d/2</text>
+    <text x="144" y="193" text-anchor="middle">d</text>
+  </g>
+</svg>

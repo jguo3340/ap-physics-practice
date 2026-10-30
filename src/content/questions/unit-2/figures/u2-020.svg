@@ -1,0 +1,14 @@
+<svg viewBox="0 30 360 170" role="img" aria-label="A block of mass m1 sits on a table, pressed against a small fixed stop on the side toward the table edge. A string runs from the block over a pulley at the table edge and down to a hanging block of mass m2." xmlns="http://www.w3.org/2000/svg">
+  <path class="fig-axis" d="M40 92H252M60 92V196M232 92V196" />
+  <rect class="fig-fill" x="100" y="52" width="60" height="40" />
+  <text class="fig-title" x="130" y="77" text-anchor="middle">m<tspan font-size="9" dy="3">1</tspan></text>
+  <rect class="fig-axis" style="fill:var(--text-muted, #5b6578)" x="160" y="80" width="7" height="12" />
+  <text class="fig-label" x="172" y="112">stop</text>
+  <path class="fig-axis" style="stroke-width:1.2" d="M171 104L165 95" />
+  <path class="fig-axis" d="M160 66H272" />
+  <path class="fig-axis" d="M252 92L272 76" />
+  <circle class="fig-fill" cx="272" cy="76" r="10" />
+  <path class="fig-axis" d="M282 76V140" />
+  <rect class="fig-fill" x="266" y="140" width="32" height="32" />
+  <text class="fig-title" x="282" y="161" text-anchor="middle">m<tspan font-size="9" dy="3">2</tspan></text>
+</svg>
