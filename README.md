@@ -75,7 +75,7 @@ The site is static, so it can be hosted free.
 ## Roadmap
 
 1. Site skeleton: home, unit list, and unit pages (done)
-2. Practice engine: questions stored as files, instant feedback, explanations, equations with KaTeX (started: every unit has an exam-style practice page, 98 questions in all, with a built-in scientific calculator and an equation sheet)
+2. Practice engine: questions stored as files, instant feedback, explanations, equations with KaTeX (started: Units 1 to 7 each have an exam-style practice page, 187 questions in all, with a built-in scientific calculator and an equation sheet)
 3. Content: a cheat sheet for each unit and original questions, starting with Units 1 and 2
 4. Visuals: interactive force diagrams and motion graphs
 5. Later: progress tracking

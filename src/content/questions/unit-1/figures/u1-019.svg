@@ -1,0 +1,31 @@
+<svg viewBox="0 0 360 232" role="img" aria-label="Speed-time graph from 0 to 1.2 s. The speed falls in a straight line from 8 m/s at t = 0 to 0 at 0.8 s, then rises in a straight line to 4 m/s at 1.2 s." xmlns="http://www.w3.org/2000/svg">
+  <g class="fig-grid">
+    <path d="M56 26V186M75.2857 26V186M94.5714 26V186M113.857 26V186M133.143 26V186M152.429 26V186M171.714 26V186M191 26V186M210.286 26V186M229.571 26V186M248.857 26V186M268.143 26V186M287.429 26V186M306.714 26V186M326 26V186" />
+    <path d="M56 186H326M56 170H326M56 154H326M56 138H326M56 122H326M56 106H326M56 90H326M56 74H326M56 58H326M56 42H326M56 26H326" />
+  </g>
+  <g class="fig-axis">
+    <path d="M56 186H336" />
+    <path d="M56 186V18" />
+  </g>
+  <g class="fig-label">
+    <text x="56" y="203" text-anchor="middle">0</text>
+    <text x="94.5714" y="203" text-anchor="middle">0.2</text>
+    <text x="133.143" y="203" text-anchor="middle">0.4</text>
+    <text x="171.714" y="203" text-anchor="middle">0.6</text>
+    <text x="210.286" y="203" text-anchor="middle">0.8</text>
+    <text x="248.857" y="203" text-anchor="middle">1</text>
+    <text x="287.429" y="203" text-anchor="middle">1.2</text>
+    <text x="326" y="203" text-anchor="middle">1.4</text>
+    <text x="46" y="190" text-anchor="end">0</text>
+    <text x="46" y="158" text-anchor="end">2</text>
+    <text x="46" y="126" text-anchor="end">4</text>
+    <text x="46" y="94" text-anchor="end">6</text>
+    <text x="46" y="62" text-anchor="end">8</text>
+    <text x="46" y="30" text-anchor="end">10</text>
+  </g>
+  <g class="fig-title">
+    <text x="191" y="225" text-anchor="middle">time, t (s)</text>
+    <text x="14" y="106" text-anchor="middle" transform="rotate(-90 14 106)">speed (m/s)</text>
+  </g>
+  <polyline class="fig-line" points="56.0,58.0 210.3,186.0 287.4,122.0" />
+</svg>

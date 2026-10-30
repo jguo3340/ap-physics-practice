@@ -1,0 +1,29 @@
+<svg viewBox="0 0 360 232" role="img" aria-label="Potential energy U against position x, with six evenly spaced points labeled P, Q, R, S, T, V. U is 1 J at P, rises in a straight line to 3 J at Q, stays at 3 J to R, falls in a straight line to 0 at S, stays at 0 to T, and rises in a straight line to 2 J at V." xmlns="http://www.w3.org/2000/svg">
+  <g class="fig-grid">
+    <path d="M56 26V186M83 26V186M110 26V186M137 26V186M164 26V186M191 26V186M218 26V186M245 26V186M272 26V186M299 26V186M326 26V186" />
+    <path d="M56 186H326M56 170H326M56 154H326M56 138H326M56 122H326M56 106H326M56 90H326M56 74H326M56 58H326M56 42H326M56 26H326" />
+  </g>
+  <g class="fig-axis">
+    <path d="M56 186H336" />
+    <path d="M56 186V18" />
+  </g>
+  <g class="fig-label">
+    <text x="56" y="203" text-anchor="middle">P</text>
+    <text x="110" y="203" text-anchor="middle">Q</text>
+    <text x="164" y="203" text-anchor="middle">R</text>
+    <text x="218" y="203" text-anchor="middle">S</text>
+    <text x="272" y="203" text-anchor="middle">T</text>
+    <text x="326" y="203" text-anchor="middle">V</text>
+    <text x="46" y="190" text-anchor="end">0</text>
+    <text x="46" y="158" text-anchor="end">1</text>
+    <text x="46" y="126" text-anchor="end">2</text>
+    <text x="46" y="94" text-anchor="end">3</text>
+    <text x="46" y="62" text-anchor="end">4</text>
+    <text x="46" y="30" text-anchor="end">5</text>
+  </g>
+  <g class="fig-title">
+    <text x="191" y="225" text-anchor="middle">position, x</text>
+    <text x="14" y="106" text-anchor="middle" transform="rotate(-90 14 106)">potential energy, U (J)</text>
+  </g>
+  <polyline class="fig-line" points="56,154 110,90 164,90 218,186 272,186 326,122" />
+</svg>

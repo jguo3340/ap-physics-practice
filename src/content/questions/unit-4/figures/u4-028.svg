@@ -1,0 +1,28 @@
+<svg viewBox="0 0 360 232" role="img" aria-label="Net force against time. The force rises in a straight line from 0 at t = 0 to 60 N at 1 s, stays at 60 N until 3 s, then falls in a straight line to 0 at 4 s." xmlns="http://www.w3.org/2000/svg">
+  <g class="fig-grid">
+    <path d="M56 26V186M83 26V186M110 26V186M137 26V186M164 26V186M191 26V186M218 26V186M245 26V186M272 26V186M299 26V186M326 26V186" />
+    <path d="M56 186H326M56 166H326M56 146H326M56 126H326M56 106H326M56 86H326M56 66H326M56 46H326M56 26H326" />
+  </g>
+  <g class="fig-axis">
+    <path d="M56 186H336" />
+    <path d="M56 186V18" />
+  </g>
+  <g class="fig-label">
+    <text x="56" y="203" text-anchor="middle">0</text>
+    <text x="110" y="203" text-anchor="middle">1</text>
+    <text x="164" y="203" text-anchor="middle">2</text>
+    <text x="218" y="203" text-anchor="middle">3</text>
+    <text x="272" y="203" text-anchor="middle">4</text>
+    <text x="326" y="203" text-anchor="middle">5</text>
+    <text x="46" y="190" text-anchor="end">0</text>
+    <text x="46" y="150" text-anchor="end">20</text>
+    <text x="46" y="110" text-anchor="end">40</text>
+    <text x="46" y="70" text-anchor="end">60</text>
+    <text x="46" y="30" text-anchor="end">80</text>
+  </g>
+  <g class="fig-title">
+    <text x="191" y="225" text-anchor="middle">time, t (s)</text>
+    <text x="14" y="106" text-anchor="middle" transform="rotate(-90 14 106)">net force, F (N)</text>
+  </g>
+  <polyline class="fig-line" points="56.0,186.0 110.0,66.0 218.0,66.0 272.0,186.0" />
+</svg>

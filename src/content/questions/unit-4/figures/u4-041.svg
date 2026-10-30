@@ -1,0 +1,33 @@
+<svg viewBox="0 0 360 232" role="img" aria-label="Position-time graph for two carts from 0 to 4 s. Cart 1 (dashed line) stays at 3 m from 0 to 2 s, then moves in a straight line to 5 m at 4 s. Cart 2 (solid line) moves in a straight line from 0 at t = 0 to 1 m at 2 s, then in a steeper straight line to 3 m at 4 s." xmlns="http://www.w3.org/2000/svg">
+  <g class="fig-grid">
+    <path d="M56 26V186M83 26V186M110 26V186M137 26V186M164 26V186M191 26V186M218 26V186M245 26V186M272 26V186M299 26V186M326 26V186" />
+    <path d="M56 186H326M56 159.333H326M56 132.667H326M56 106H326M56 79.3333H326M56 52.6667H326M56 26H326" />
+  </g>
+  <g class="fig-axis">
+    <path d="M56 186H336" />
+    <path d="M56 186V18" />
+  </g>
+  <g class="fig-label">
+    <text x="56" y="203" text-anchor="middle">0</text>
+    <text x="110" y="203" text-anchor="middle">1</text>
+    <text x="164" y="203" text-anchor="middle">2</text>
+    <text x="218" y="203" text-anchor="middle">3</text>
+    <text x="272" y="203" text-anchor="middle">4</text>
+    <text x="326" y="203" text-anchor="middle">5</text>
+    <text x="46" y="190" text-anchor="end">0</text>
+    <text x="46" y="163.333" text-anchor="end">1</text>
+    <text x="46" y="136.667" text-anchor="end">2</text>
+    <text x="46" y="110" text-anchor="end">3</text>
+    <text x="46" y="83.3333" text-anchor="end">4</text>
+    <text x="46" y="56.6667" text-anchor="end">5</text>
+    <text x="46" y="30" text-anchor="end">6</text>
+  </g>
+  <g class="fig-title">
+    <text x="191" y="225" text-anchor="middle">time, t (s)</text>
+    <text x="14" y="106" text-anchor="middle" transform="rotate(-90 14 106)">position, x (m)</text>
+  </g>
+  <polyline class="fig-line" style="stroke-dasharray:9 6" points="56.0,106.0 164.0,106.0 272.0,52.7" />
+  <polyline class="fig-line" points="56.0,186.0 164.0,159.3 272.0,106.0" />
+  <text class="fig-title" x="277.4" y="52.6667">cart 1</text>
+  <text class="fig-title" x="277.4" y="110">cart 2</text>
+</svg>
