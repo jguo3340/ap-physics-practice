@@ -2,6 +2,8 @@
 
 A study site for AP Physics 1: AP-style multiple-choice practice organized by unit, with an explanation for every answer, plus a cheat sheet for each unit with key ideas, equations, and diagrams.
 
+Live at **https://jguo3340.github.io/ap-physics-practice/** once GitHub Pages is turned on (see Deploying).
+
 Built with [Astro](https://astro.build), a framework that turns the files in `src/` into a fast static website.
 
 ## Run it on your computer
@@ -65,7 +67,7 @@ A graph or diagram goes in the unit's `figures/` folder as an SVG, named in the 
 
 The site is static, so it can be hosted free.
 
-- **GitHub Pages (set up already):** `.github/workflows/deploy.yml` builds and publishes the site on every push to `main`. Turn it on once under the repo's **Settings → Pages → Source: GitHub Actions**. The site then lives at `https://<user>.github.io/<repo>/`.
+- **GitHub Pages (set up already):** `.github/workflows/deploy.yml` builds and publishes the site on every push to `main`. Turn it on once under the repo's **Settings → Pages → Source: GitHub Actions**. The site then lives at `https://<user>.github.io/<repo>/`. After that, every change merged into `main` goes live on its own within a few minutes; the **Actions** tab shows each deploy.
 - **Vercel or Netlify:** import this repository and keep the default Astro settings.
 
 `BASE_PATH` tells the build which sub-folder the site is served from (GitHub Pages uses `/<repo>`); leave it unset for a site at the root of a domain.
