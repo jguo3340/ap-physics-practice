@@ -117,8 +117,8 @@ const keys: Key[] = [
     gap: 10px;
     width: 340px;
     padding: 0 14px 14px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
+    border: 2px solid var(--stroke);
+    border-radius: var(--sketch);
     background: var(--surface);
     box-shadow: var(--shadow);
   }
@@ -142,9 +142,7 @@ const keys: Key[] = [
   .calc-head h2 {
     flex: 1;
     margin: 0;
-    font-family: var(--font-sans);
-    font-size: 0.95rem;
-    letter-spacing: 0;
+    font-size: 1.2rem;
   }
 
   .angle {
@@ -203,7 +201,7 @@ const keys: Key[] = [
     padding: 0;
     overflow-y: auto;
     list-style: none;
-    font-family: var(--font-mono);
+    font-family: var(--font-digits);
     font-size: 0.85rem;
   }
 
@@ -263,7 +261,7 @@ const keys: Key[] = [
     outline: none;
     background: none;
     color: var(--text);
-    font-family: var(--font-mono);
+    font-family: var(--font-digits);
     font-size: 1.15rem;
   }
 
@@ -274,7 +272,7 @@ const keys: Key[] = [
 
   .calc-preview {
     min-height: 1.4em;
-    font-family: var(--font-mono);
+    font-family: var(--font-digits);
     font-size: 0.95rem;
     text-align: right;
     color: var(--text-muted);
@@ -284,7 +282,7 @@ const keys: Key[] = [
   .calc-preview.is-error {
     color: var(--highlight);
     font-family: var(--font-sans);
-    font-size: 0.85rem;
+    font-size: 0.95rem;
   }
 
   .calc-keys {
@@ -301,8 +299,7 @@ const keys: Key[] = [
     background: var(--surface-2);
     color: var(--text);
     font-family: var(--font-sans);
-    font-size: 0.95rem;
-    font-weight: 500;
+    font-size: 1.05rem;
     cursor: pointer;
     touch-action: manipulation;
   }
@@ -317,9 +314,7 @@ const keys: Key[] = [
 
   .key-num {
     background: var(--surface);
-    font-family: var(--font-mono);
-    font-size: 1.05rem;
-    font-weight: 600;
+    font-size: 1.2rem;
   }
 
   .key-op {
@@ -352,9 +347,9 @@ const keys: Key[] = [
   @media (max-width: 640px) {
     .calc {
       top: auto;
-      right: 0;
-      bottom: 0;
-      left: 0;
+      right: var(--frame-w);
+      bottom: var(--tray-h);
+      left: var(--frame-w);
       width: auto;
       max-height: 85vh;
       max-height: 85dvh;

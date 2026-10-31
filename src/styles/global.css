@@ -1,58 +1,108 @@
 /* Colors, fonts, and spacing live here as variables, so the whole site can be
-   restyled from one place. The site is light by default; the theme switch in
-   the header sets data-mode="dark" on <html>, which swaps the color variables. */
+   restyled from one place.
+
+   The look is the board at the front of a physics classroom. Light mode (the
+   default) is a whiteboard with an aluminum frame and marker colors; the theme
+   switch in the header sets data-mode="dark" on <html>, which turns it into a
+   green chalkboard with a wooden frame and chalk colors. */
 
 :root {
-  --bg: #ffffff;
-  --surface: #ffffff;
-  --surface-2: #f2f6fc;
-  --text: #10213f;
-  --text-muted: #56658a;
-  --border: #d9e1ee;
-  --accent: #1f5eff;
-  --accent-hover: #1749cc;
-  --accent-soft: #e8efff;
+  /* the board and what's written on it */
+  --bg: #fbfcfd;
+  --surface: #fbfcfd;
+  --surface-2: #f0f3f7;
+  --text: #1d2430;
+  --text-muted: #5a6475;
+  --border: #c9d0da;
+  /* marker outlines on cards, buttons, and answer letters */
+  --stroke: #3b4453;
+  --accent: #1f5bd6;
+  --accent-hover: #1747a8;
+  --accent-soft: #e5edfc;
   --accent-text: #ffffff;
-  --highlight: #ff6413;
-  --highlight-soft: #fff0e6;
-  --force-green: #0b9b6f;
-  --force-green-soft: #e4f6ef;
-  /* graph-paper lines */
-  --grid: #edf2fa;
-  --grid-major: #dce5f3;
+  --highlight: #d7263d;
+  --highlight-soft: #fce8eb;
+  --force-green: #11845a;
+  --force-green-soft: #e2f4ec;
+  /* grid lines inside question graphs */
+  --grid: #e7ebf1;
+  --grid-major: #d5dce6;
+
+  /* the frame around the board and the tray along the bottom */
+  --frame-a: #eef1f4;
+  --frame-b: #a3acb7;
+  --tray: #c3cad3;
+  --eraser-handle: #3a3a3a;
+  --eraser-felt: #b9b2a3;
+  /* faint eraser smudges on the board */
+  --smudge: rgb(110 125 150 / 0.07);
+  /* chalk glows a little; marker doesn't */
+  --glow: transparent;
+  --dust: none;
+  /* everything painted on the board's surface; sticky bars reuse it so they
+     blend in instead of showing a flat band */
+  --board-image:
+    var(--dust),
+    radial-gradient(ellipse 40% 18% at 22% 30%, var(--smudge), transparent 70%),
+    radial-gradient(ellipse 35% 22% at 76% 66%, var(--smudge), transparent 70%),
+    radial-gradient(ellipse 50% 14% at 50% 94%, var(--smudge), transparent 70%);
+
+  --frame-w: 10px;
+  --tray-h: 18px;
 
   --radius: 12px;
   --radius-sm: 8px;
-  --shadow: 0 10px 40px rgb(16 33 63 / 0.08);
+  /* hand-drawn corners: slightly different on every side */
+  --sketch: 10px 16px 11px 14px;
+  --sketch-sm: 6px 10px 7px 9px;
+  --shadow: 0 10px 30px rgb(29 36 48 / 0.1);
   --max-width: 1160px;
   --gutter: 16px;
 
-  --font-display: 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
-  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --font-display: 'Cabin Sketch', 'Comic Sans MS', 'Chalkboard SE', cursive;
+  --font-sans: 'Patrick Hand', 'Comic Sans MS', 'Chalkboard SE', ui-rounded, system-ui, sans-serif;
+  /* labels, letters, and numbers use the same handwriting */
+  --font-mono: var(--font-sans);
+  /* only the calculator's screen keeps typed digits */
+  --font-digits: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 
   color-scheme: light;
 }
 
 :root[data-mode='dark'] {
-  --bg: #0d1526;
-  --surface: #111b30;
-  --surface-2: #17233d;
-  --text: #e6ecfa;
-  --text-muted: #93a2c3;
-  --border: #26345a;
-  --accent: #7aa2ff;
-  --accent-hover: #a3c0ff;
-  --accent-soft: #1b2a4f;
-  --accent-text: #0d1526;
-  --highlight: #ff8a4a;
-  --highlight-soft: #3a2316;
-  --force-green: #3fd3a0;
-  --force-green-soft: #11322a;
-  --grid: #131d33;
-  --grid-major: #1a2846;
-  --shadow: 0 10px 40px rgb(0 0 0 / 0.35);
+  --bg: #213b33;
+  --surface: #213b33;
+  --surface-2: #2a473e;
+  --text: #efede4;
+  --text-muted: #b5c2ba;
+  --border: #4d6a60;
+  --stroke: #d9dccf;
+  --accent: #a8d8f6;
+  --accent-hover: #cfeafb;
+  --accent-soft: #2d4d52;
+  --accent-text: #16302a;
+  --highlight: #f5a3c4;
+  --highlight-soft: #43404a;
+  --force-green: #f2d46b;
+  --force-green-soft: #3d4a37;
+  --grid: #2c4a41;
+  --grid-major: #3a5a50;
+
+  --frame-a: #8a5f3a;
+  --frame-b: #4b311c;
+  --tray: #5a3b22;
+  --smudge: rgb(255 255 255 / 0.05);
+  --glow: rgb(255 255 255 / 0.35);
+  --dust: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --shadow: 0 10px 30px rgb(0 0 0 / 0.35);
   color-scheme: dark;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --frame-w: 6px;
+    --tray-h: 14px;
+  }
 }
 
 *,
@@ -63,18 +113,65 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  /* Handwriting runs small, so the whole site is set a notch larger. */
+  font-size: 106.25%;
 }
 
 body {
   margin: 0;
-  background: var(--bg);
+  padding: var(--frame-w) var(--frame-w) var(--tray-h);
+  background-color: var(--bg);
+  background-image: var(--board-image);
+  background-attachment: fixed;
   color: var(--text);
   font-family: var(--font-sans);
   font-size: 1rem;
-  line-height: 1.6;
+  line-height: 1.55;
+  text-shadow: 0 0 1px var(--glow);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+/* The board's frame stays put around the window while the page scrolls. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0 0 var(--tray-h);
+  z-index: 40;
+  border: var(--frame-w) solid var(--frame-b);
+  border-bottom: 0;
+  border-image: linear-gradient(160deg, var(--frame-a), var(--frame-b)) 1;
+  box-shadow:
+    inset 0 0 0 1px rgb(0 0 0 / 0.12),
+    inset 0 6px 16px rgb(0 0 0 / 0.08);
+  pointer-events: none;
+}
+
+/* The tray along the bottom, with two markers (or chalk) and an eraser on it. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: auto 0 0;
+  z-index: 41;
+  height: var(--tray-h);
+  background:
+    linear-gradient(var(--eraser-handle) 0 58%, var(--eraser-felt) 58%) right 14% bottom 3px / 64px 11px no-repeat,
+    linear-gradient(var(--accent), var(--accent)) left 16% bottom 4px / 46px 7px no-repeat,
+    linear-gradient(var(--highlight), var(--highlight)) left 22% bottom 4px / 40px 7px no-repeat,
+    var(--tray);
+  box-shadow: inset 0 3px 0 rgb(0 0 0 / 0.18);
+  pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  body::after {
+    background:
+      linear-gradient(var(--eraser-handle) 0 58%, var(--eraser-felt) 58%) right 12% bottom 2px / 48px 9px no-repeat,
+      linear-gradient(var(--accent), var(--accent)) left 10% bottom 3px / 34px 6px no-repeat,
+      linear-gradient(var(--highlight), var(--highlight)) left 24% bottom 3px / 30px 6px no-repeat,
+      var(--tray);
+  }
 }
 
 main {
@@ -85,25 +182,23 @@ h1,
 h2,
 h3 {
   font-family: var(--font-display);
+  font-weight: 700;
   line-height: 1.1;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
   margin: 0 0 0.5em;
   text-wrap: balance;
 }
 
 h1 {
   font-size: clamp(2rem, 4.5vw, 3rem);
-  font-weight: 800;
 }
 
 h2 {
-  font-size: clamp(1.35rem, 3vw, 1.7rem);
-  font-weight: 700;
+  font-size: clamp(1.4rem, 3vw, 1.75rem);
 }
 
 h3 {
-  font-size: 1.1rem;
-  font-weight: 700;
+  font-size: 1.15rem;
 }
 
 p {
@@ -139,67 +234,51 @@ a:hover {
   color: var(--text-muted);
 }
 
-/* Faint graph paper, like a physics notebook. */
-.graph-paper {
-  background-color: var(--bg);
-  background-image:
-    linear-gradient(var(--grid-major) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
-    linear-gradient(var(--grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-  background-size:
-    120px 120px,
-    120px 120px,
-    24px 24px,
-    24px 24px;
-}
-
+/* A small handwritten label above a heading, in blue marker. */
 .eyebrow {
   display: inline-block;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-size: 1.05rem;
   color: var(--accent);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 4px 10px;
-  margin-bottom: 1em;
+  margin-bottom: 0.6em;
 }
 
 .button {
   display: inline-flex;
   align-items: center;
   gap: 0.4em;
-  padding: 0.8em 1.35em;
-  border-radius: 10px;
-  border: 1px solid transparent;
-  font-weight: 600;
-  font-size: 1rem;
+  padding: 0.5em 1.1em;
+  border-radius: var(--sketch);
+  border: 2.5px solid var(--stroke);
+  background: none;
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 1.08rem;
   text-decoration: none;
   line-height: 1.2;
   white-space: nowrap;
   transition:
-    background-color 0.15s,
+    transform 0.15s,
+    color 0.15s,
     border-color 0.15s;
 }
 
+.button:hover:not(:disabled) {
+  transform: translateY(-2px) rotate(-1deg);
+}
+
 .button-primary {
-  background: var(--accent);
-  color: var(--accent-text);
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 3px 3px 0 var(--accent);
 }
 
 .button-primary:hover {
-  background: var(--accent-hover);
-  color: var(--accent-text);
+  color: var(--accent-hover);
 }
 
 .button-secondary {
-  background: var(--surface);
   color: var(--text);
-  border-color: var(--border);
 }
 
 .button-secondary:hover {
@@ -207,24 +286,27 @@ a:hover {
   color: var(--accent);
 }
 
+/* A box drawn on the board in marker or chalk. */
 .card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  background: none;
+  border: 2px solid color-mix(in srgb, var(--stroke) 70%, transparent);
+  border-radius: var(--sketch);
 }
 
+/* A unit number circled by hand. */
 .unit-badge {
   display: inline-grid;
   place-items: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: var(--radius-sm);
-  background: var(--accent-soft);
+  width: 2.4rem;
+  height: 2.3rem;
+  border: 2.5px solid var(--accent);
+  border-radius: 46% 54% 50% 44% / 52% 44% 56% 48%;
   color: var(--accent);
   font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 1rem;
+  font-weight: 700;
+  font-size: 1.15rem;
   flex-shrink: 0;
+  transform: rotate(-6deg);
 }
 
 [hidden] {
@@ -241,6 +323,13 @@ a:hover {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+/* Math keeps its own crisp fonts and skips the chalk glow. KaTeX's usual size
+   is tuned for print fonts; next to handwriting it reads a little large. */
+body .katex {
+  font-size: 1.08em;
+  text-shadow: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

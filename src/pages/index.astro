@@ -46,14 +46,18 @@ const multipleChoice = examFormat[0];
 
   h1 {
     font-size: clamp(2.1rem, 5.2vw, 4.1rem);
-    line-height: 1.02;
-    letter-spacing: -0.03em;
-    margin: 0.25em 0 0.3em;
+    line-height: 1.05;
+    margin: 0.15em 0 0.35em;
   }
 
+  /* Underlined in red marker, the way you'd stress a word on the board. */
   h1 em {
     font-style: normal;
-    color: var(--accent);
+    color: var(--highlight);
+    background-image: linear-gradient(var(--highlight), var(--highlight));
+    background-size: 100% 0.08em;
+    background-position: 0 92%;
+    background-repeat: no-repeat;
   }
 
   .eyebrow {
@@ -61,33 +65,31 @@ const multipleChoice = examFormat[0];
   }
 
   .lede {
-    font-size: clamp(1rem, 1.4vw, 1.125rem);
-    color: var(--text-muted);
-    max-width: 34em;
+    font-size: clamp(1.05rem, 1.4vw, 1.2rem);
+    max-width: 32em;
     margin-bottom: 28px;
   }
 
   .actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 14px;
   }
 
   .facts {
     display: flex;
     flex-wrap: wrap;
-    gap: 28px;
+    gap: 8px 32px;
     margin: 36px 0 0;
-    font-size: 0.875rem;
-    color: var(--text-muted);
+    font-size: 0.95rem;
   }
 
   .facts dt {
     font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 1.6rem;
+    font-weight: 700;
+    font-size: 1.75rem;
     line-height: 1.1;
-    color: var(--text);
+    color: var(--force-green);
   }
 
   .facts dd {
@@ -133,8 +135,8 @@ const multipleChoice = examFormat[0];
     }
 
     .button {
-      padding: 0.65em 0.9em;
-      font-size: 0.875rem;
+      padding: 0.45em 0.85em;
+      font-size: 0.95rem;
     }
   }
 </style>

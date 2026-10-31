@@ -296,7 +296,6 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
     flex-direction: column;
     min-height: 100vh;
     min-height: 100dvh;
-    background: var(--bg);
   }
 
   .exam button {
@@ -324,8 +323,14 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
     justify-content: space-between;
     gap: 10px 24px;
     padding: 10px max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px));
-    border-bottom: 1px solid var(--border);
-    background: var(--bg);
+    border-bottom: 2px solid var(--border);
+    background-color: var(--bg);
+    background-image: var(--board-image);
+    background-attachment: fixed;
+  }
+
+  .exam-header {
+    top: var(--frame-w);
   }
 
   .exam-title {
@@ -336,19 +341,17 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
   }
 
   .exam-title strong {
-    font-size: 1.05rem;
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    line-height: 1.15;
   }
 
   .deck-line {
     display: flex;
     flex-wrap: wrap;
     gap: 0 10px;
-    font-size: 0.85rem;
+    font-size: 0.95rem;
     color: var(--text-muted);
-  }
-
-  .deck-line a {
-    font-weight: 600;
   }
 
   .link-button {
@@ -360,8 +363,7 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
     border: 0;
     background: none;
     color: var(--text-muted);
-    font-size: 0.85rem;
-    font-weight: 600;
+    font-size: 0.95rem;
   }
 
   .link-button svg {
@@ -383,11 +385,10 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
   }
 
   .clock {
-    font-family: var(--font-mono);
-    font-size: 1.4rem;
-    font-weight: 600;
-    line-height: 1.2;
-    letter-spacing: 0.02em;
+    min-width: 4.2em;
+    font-size: 1.6rem;
+    line-height: 1.15;
+    text-align: center;
   }
 
   .timer.is-hidden .clock {
@@ -400,18 +401,16 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
   }
 
   .time-up {
-    font-size: 0.75rem;
-    font-weight: 700;
+    font-size: 0.9rem;
   }
 
   .pill-button {
-    padding: 2px 12px;
-    border: 1px solid var(--border);
-    border-radius: 99px;
-    background: var(--surface);
+    padding: 0 12px;
+    border: 1.5px dashed var(--stroke);
+    border-radius: var(--sketch-sm);
+    background: none;
     color: var(--text);
-    font-size: 0.75rem;
-    font-weight: 600;
+    font-size: 0.85rem;
   }
 
   .tools {
@@ -430,19 +429,18 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
     min-width: 56px;
     min-height: 44px;
     padding: 4px 8px;
-    border: 0;
-    border-radius: var(--radius-sm);
+    border: 2px solid transparent;
+    border-radius: var(--sketch-sm);
     background: none;
     color: var(--text);
-    font-size: 0.75rem;
-    font-weight: 600;
+    font-size: 0.88rem;
     text-decoration: none;
   }
 
   .tool:hover,
   .tool[aria-expanded='true'] {
-    background: var(--surface-2);
-    color: var(--text);
+    border-color: var(--border);
+    color: var(--accent);
   }
 
   .tool svg {
@@ -460,38 +458,39 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
     border: 0;
     background: none;
     color: var(--text);
-    font-size: 0.85rem;
-    font-weight: 600;
+    font-size: 1rem;
     white-space: nowrap;
   }
 
   .switch-track {
     position: relative;
-    width: 38px;
-    height: 22px;
-    border-radius: 99px;
-    background: var(--border);
-    transition: background-color 0.15s;
+    width: 42px;
+    height: 24px;
+    border: 2px solid var(--stroke);
+    border-radius: 13px 15px 14px 12px;
+    transition: border-color 0.15s;
   }
 
   .switch-thumb {
     position: absolute;
     top: 3px;
     left: 3px;
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
     border-radius: 50%;
-    background: var(--surface);
-    box-shadow: 0 1px 2px rgb(0 0 0 / 0.25);
-    transition: transform 0.15s;
+    background: var(--text-muted);
+    transition:
+      transform 0.15s,
+      background-color 0.15s;
   }
 
   .switch[aria-checked='true'] .switch-track {
-    background: var(--accent);
+    border-color: var(--accent);
   }
 
   .switch[aria-checked='true'] .switch-thumb {
-    transform: translateX(16px);
+    background: var(--accent);
+    transform: translateX(18px);
   }
 
   /* ---------- popovers and the equation drawer ---------- */
@@ -499,8 +498,8 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
   .popover {
     z-index: 8;
     padding: 18px 20px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
+    border: 2px solid var(--stroke);
+    border-radius: var(--sketch);
     background: var(--surface);
     box-shadow: var(--shadow);
   }
@@ -508,14 +507,12 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
   .popover h2,
   .drawer h2 {
     margin: 0 0 8px;
-    font-family: var(--font-sans);
-    font-size: 1rem;
-    letter-spacing: 0;
+    font-size: 1.3rem;
   }
 
   .directions {
     position: absolute;
-    top: 76px;
+    top: 80px;
     left: max(16px, env(safe-area-inset-left, 0px));
     width: min(440px, calc(100% - 32px));
     font-size: 0.95rem;
@@ -526,20 +523,20 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
   }
 
   .fine-print {
-    font-size: 0.8rem;
+    font-size: 0.88rem;
     color: var(--text-muted);
   }
 
   .drawer {
     position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
+    top: var(--frame-w);
+    right: var(--frame-w);
+    bottom: var(--tray-h);
     z-index: 9;
-    width: min(380px, 100%);
+    width: min(380px, calc(100% - 2 * var(--frame-w)));
     padding: 16px max(20px, env(safe-area-inset-right, 0px)) 20px 20px;
     overflow-y: auto;
-    border-left: 1px solid var(--border);
+    border-left: 2px solid var(--stroke);
     background: var(--surface);
     box-shadow: var(--shadow);
   }
@@ -578,13 +575,13 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
   }
 
   .equations div {
-    padding: 10px 14px;
-    border-radius: var(--radius-sm);
-    background: var(--surface-2);
+    padding: 8px 14px;
+    border: 1.5px dashed var(--border);
+    border-radius: var(--sketch-sm);
   }
 
   .equations dt {
-    font-size: 0.8rem;
+    font-size: 0.95rem;
     color: var(--text-muted);
   }
 
@@ -602,8 +599,7 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
     justify-content: space-between;
     gap: 12px;
     padding: 6px max(16px, env(safe-area-inset-right, 0px)) 6px max(16px, env(safe-area-inset-left, 0px));
-    border-bottom: 1px solid var(--border);
-    background: var(--surface-2);
+    border-bottom: 2px dashed var(--border);
   }
 
   .question-bar-start {
@@ -615,20 +611,20 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
   .q-number {
     display: inline-grid;
     place-items: center;
-    min-width: 34px;
+    min-width: 36px;
     height: 34px;
     padding: 0 6px;
-    border-radius: 6px;
-    background: var(--text);
-    color: var(--bg);
-    font-family: var(--font-mono);
-    font-weight: 600;
+    border: 2.5px solid var(--stroke);
+    border-radius: var(--sketch-sm);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.15rem;
   }
 
   .q-number.small {
-    min-width: 30px;
+    min-width: 32px;
     height: 30px;
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
 
   .mark {
@@ -640,8 +636,7 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
     border: 0;
     background: none;
     color: var(--text);
-    font-size: 0.9rem;
-    font-weight: 600;
+    font-size: 1.05rem;
   }
 
   .mark svg {
@@ -660,13 +655,11 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
     min-width: 54px;
     height: 36px;
     padding: 0 10px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    background: var(--surface);
+    border: 2px solid var(--stroke);
+    border-radius: var(--sketch-sm);
+    background: none;
     color: var(--text);
-    font-family: var(--font-mono);
-    font-weight: 600;
-    font-size: 0.8rem;
+    font-size: 1rem;
   }
 
   .cross-toggle span {
@@ -698,16 +691,13 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
 
   .q-meta {
     margin: 0;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--text-muted);
+    font-size: 1rem;
+    color: var(--accent);
   }
 
   .stem {
-    font-size: 1.125rem;
-    max-width: 42em;
+    font-size: 1.2rem;
+    max-width: 40em;
   }
 
   .stem :global(p:last-child) {
@@ -718,9 +708,8 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
     margin: 0;
     max-width: 440px;
     padding: 12px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    background: var(--surface);
+    border: 2px solid color-mix(in srgb, var(--stroke) 45%, transparent);
+    border-radius: var(--sketch);
   }
 
   .figure :global(svg) {
@@ -759,13 +748,13 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
   .figure :global(.fig-title) {
     fill: var(--text-muted);
     stroke: none;
-    font-family: var(--font-mono);
-    font-size: 11px;
+    font-family: var(--font-sans);
+    font-size: 13px;
   }
 
   .figure :global(.fig-title) {
     fill: var(--text);
-    font-size: 12px;
+    font-size: 14px;
   }
 
   .figure :global(.fig-fill) {
@@ -805,23 +794,27 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
     gap: 8px;
   }
 
+  /* Answers are written straight on the board. The one you pick gets circled
+     in blue; after checking, the right answer is circled in green and a wrong
+     pick in red, like a teacher marking it. */
   .choice {
     position: relative;
     flex: 1;
     min-width: 0;
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 18px;
     min-height: 52px;
-    padding: 13px 17px;
-    border: 1px solid var(--text-muted);
-    border-radius: 10px;
-    background: var(--surface);
+    padding: 9px 14px;
+    border: 2px dashed transparent;
+    border-radius: var(--sketch);
+    background: none;
+    font-size: 1.15rem;
     cursor: pointer;
   }
 
   .choice:hover {
-    border-color: var(--accent);
+    border-color: var(--border);
   }
 
   .choice input {
@@ -836,16 +829,27 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
   }
 
   .letter {
+    position: relative;
     flex-shrink: 0;
     display: inline-grid;
     place-items: center;
-    width: 30px;
+    width: 32px;
     height: 30px;
-    border: 1.5px solid var(--text);
-    border-radius: 50%;
-    font-family: var(--font-mono);
-    font-weight: 600;
-    font-size: 0.875rem;
+    border: 2px solid var(--stroke);
+    border-radius: var(--sketch-sm);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.15rem;
+  }
+
+  .letter::after {
+    content: '';
+    position: absolute;
+    inset: -7px -8px;
+    border: 3px solid transparent;
+    border-radius: 46% 54% 50% 44% / 52% 44% 56% 48%;
+    transform: rotate(-8deg);
+    pointer-events: none;
   }
 
   .choice-text {
@@ -853,15 +857,15 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
   }
 
   .choice:has(input:checked) {
-    border: 2px solid var(--accent);
-    padding: 12px 16px;
-    background: var(--accent-soft);
+    color: var(--accent);
   }
 
   .choice:has(input:checked) .letter {
+    border-color: transparent;
+  }
+
+  .choice:has(input:checked) .letter::after {
     border-color: var(--accent);
-    background: var(--accent);
-    color: var(--accent-text);
   }
 
   .cross-button,
@@ -879,21 +883,18 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
   .cross-button span {
     display: inline-grid;
     place-items: center;
-    width: 26px;
+    width: 28px;
     height: 26px;
-    border: 1.5px solid currentColor;
-    border-radius: 50%;
-    font-family: var(--font-mono);
-    font-weight: 600;
-    font-size: 0.8rem;
+    border: 2px solid currentColor;
+    border-radius: var(--sketch-sm);
+    font-size: 0.95rem;
     text-decoration: line-through;
     text-decoration-thickness: 2px;
   }
 
   .undo-button {
     color: var(--accent);
-    font-weight: 700;
-    font-size: 0.9rem;
+    font-size: 1rem;
     text-decoration: underline;
   }
 
@@ -917,33 +918,50 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
     cursor: default;
   }
 
+  .choice-row.is-locked .choice:hover {
+    border-color: transparent;
+  }
+
   .choice-row.is-locked:not(.is-correct, .is-wrong) .choice {
-    border-color: var(--border);
-    opacity: 0.7;
+    opacity: 0.55;
   }
 
   .choices .choice-row.is-correct .choice {
-    border: 2px solid var(--force-green);
-    padding: 12px 16px;
-    background: var(--force-green-soft);
-  }
-
-  .choices .choice-row.is-correct .letter {
-    border-color: var(--force-green);
-    background: var(--force-green);
-    color: var(--bg);
+    color: var(--force-green);
   }
 
   .choices .choice-row.is-wrong .choice {
-    border: 2px solid var(--highlight);
-    padding: 12px 16px;
-    background: var(--highlight-soft);
+    color: var(--highlight);
   }
 
+  .choices .choice-row.is-correct .letter,
   .choices .choice-row.is-wrong .letter {
+    border-color: transparent;
+  }
+
+  .choices .choice-row.is-correct .letter::after {
+    border-color: var(--force-green);
+  }
+
+  .choices .choice-row.is-wrong .letter::after {
     border-color: var(--highlight);
-    background: var(--highlight);
-    color: var(--bg);
+  }
+
+  .choices .choice-row.is-correct .choice::after,
+  .choices .choice-row.is-wrong .choice::after {
+    margin-left: auto;
+    padding-left: 8px;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+
+  .choices .choice-row.is-correct .choice::after {
+    content: '✓';
+  }
+
+  .choices .choice-row.is-wrong .choice::after {
+    content: '✗';
   }
 
   .check-button {
@@ -952,15 +970,17 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
 
   .button:disabled {
     opacity: 0.45;
+    box-shadow: none;
     cursor: not-allowed;
   }
 
   .feedback {
     min-width: 0;
-    padding: 16px 20px;
-    border-left: 4px solid var(--highlight);
-    border-radius: var(--radius-sm);
+    padding: 14px 20px 16px;
+    border-left: 3px solid var(--highlight);
+    border-radius: 2px var(--radius-sm) var(--radius-sm) 2px;
     background: var(--surface-2);
+    font-size: 1.08rem;
   }
 
   .feedback.is-right {
@@ -968,10 +988,11 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
   }
 
   .verdict {
-    margin-bottom: 0.5em;
+    margin-bottom: 0.4em;
     font-family: var(--font-display);
-    font-size: 1.2rem;
+    font-size: 1.55rem;
     font-weight: 700;
+    line-height: 1.1;
     color: var(--highlight);
   }
 
@@ -981,11 +1002,9 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
 
   .small-label {
     margin: 0 0 4px;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    font-family: var(--font-sans);
+    font-size: 1.05rem;
+    font-weight: 400;
     color: var(--text-muted);
   }
 
@@ -1014,7 +1033,7 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
   .solution :global(th),
   .solution :global(td) {
     padding: 6px 14px 6px 0;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1.5px dashed var(--border);
     text-align: left;
   }
 
@@ -1023,9 +1042,11 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
     color: var(--text-muted);
   }
 
+  /* Phones: display equations at the same size as the text around them, so
+     long ones still fit across a narrow screen. */
   @media (max-width: 480px) {
     .solution :global(.katex-display > .katex) {
-      font-size: 1em;
+      font-size: 0.94em;
     }
   }
 
@@ -1064,30 +1085,25 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
     width: 100%;
     max-width: 560px;
     border-collapse: collapse;
-    font-size: 0.95rem;
+    font-size: 1.05rem;
   }
 
   .breakdown th {
     text-align: left;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    font-weight: 400;
     color: var(--text-muted);
   }
 
   .breakdown th,
   .breakdown :global(td) {
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border);
+    padding: 6px 0;
+    border-bottom: 1.5px dashed var(--border);
   }
 
   .breakdown th:last-child,
   .breakdown :global(td:last-child) {
     padding-left: 16px;
     text-align: right;
-    font-family: var(--font-mono);
     white-space: nowrap;
   }
 
@@ -1108,9 +1124,8 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
     grid-template-columns: minmax(0, 1fr);
     gap: 12px;
     padding: 18px 20px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    background: var(--surface);
+    border: 2px solid color-mix(in srgb, var(--stroke) 60%, transparent);
+    border-radius: var(--sketch);
   }
 
   .review-card p {
@@ -1118,7 +1133,7 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
   }
 
   .review-card .stem {
-    font-size: 1rem;
+    font-size: 1.08rem;
   }
 
   .review-top {
@@ -1129,22 +1144,22 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
   }
 
   .pill {
-    padding: 3px 10px;
-    border-radius: 99px;
-    background: var(--highlight-soft);
+    padding: 0 10px;
+    border: 2px solid var(--highlight);
+    border-radius: var(--sketch-sm);
     color: var(--highlight);
-    font-size: 0.8rem;
-    font-weight: 700;
+    font-size: 1rem;
+    transform: rotate(-2deg);
   }
 
   .pill.is-right {
-    background: var(--force-green-soft);
+    border-color: var(--force-green);
     color: var(--force-green);
   }
 
   .solution-box {
     padding: 12px 16px;
-    border-radius: var(--radius-sm);
+    border-radius: var(--sketch-sm);
     background: var(--surface-2);
   }
 
@@ -1161,12 +1176,18 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
     gap: 10px 16px;
     padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px))
       max(16px, env(safe-area-inset-left, 0px));
-    border-top: 1px solid var(--border);
-    background: var(--bg);
+    border-top: 2px solid var(--border);
+    background-color: var(--bg);
+    background-image: var(--board-image);
+    background-attachment: fixed;
+  }
+
+  .exam-footer {
+    bottom: var(--tray-h);
   }
 
   .answered {
-    font-size: 0.9rem;
+    font-size: 1rem;
     color: var(--text-muted);
   }
 
@@ -1180,12 +1201,11 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
     gap: 8px;
     min-height: 44px;
     padding: 0 18px;
-    border: 0;
-    border-radius: var(--radius-sm);
-    background: var(--text);
-    color: var(--bg);
-    font-size: 0.95rem;
-    font-weight: 600;
+    border: 2.5px solid var(--stroke);
+    border-radius: var(--sketch);
+    background: none;
+    color: var(--text);
+    font-size: 1.08rem;
     white-space: nowrap;
   }
 
@@ -1222,7 +1242,7 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
     margin: 0;
     padding: 0;
     list-style: none;
-    font-size: 0.8rem;
+    font-size: 0.95rem;
     color: var(--text-muted);
   }
 
@@ -1289,13 +1309,11 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
   .tiles :global(button) {
     width: 44px;
     height: 44px;
-    border: 1px dashed var(--accent);
-    border-radius: 6px;
-    background: var(--surface);
+    border: 2px dashed var(--accent);
+    border-radius: var(--sketch-sm);
+    background: none;
     color: var(--accent);
-    font-family: var(--font-mono);
-    font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 1.1rem;
   }
 
   .tiles :global(button.is-answered) {
@@ -1318,8 +1336,7 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
   .finish-button,
   .check-button {
     min-height: 44px;
-    border-radius: 99px;
-    font-size: 0.95rem;
+    font-size: 1.08rem;
   }
 
   .exam.is-finished .question-bar,
@@ -1368,10 +1385,9 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
     display: grid;
     place-items: center;
     min-height: 64px;
-    padding: 10px 12px;
-    border: 1px solid var(--text-muted);
-    border-radius: 10px;
-    background: var(--surface);
+    padding: 9px 11px;
+    border: 2px solid color-mix(in srgb, var(--stroke) 70%, transparent);
+    border-radius: var(--sketch);
     cursor: pointer;
     text-align: center;
   }
@@ -1392,20 +1408,21 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
   }
 
   .count-options :global(.count-option:has(input:checked)) {
-    border: 2px solid var(--accent);
-    padding: 9px 11px;
-    background: var(--accent-soft);
+    border: 3px solid var(--accent);
+    padding: 8px 10px;
+    color: var(--accent);
+    transform: rotate(-1.5deg);
   }
 
   .count-options :global(.count-number) {
     font-family: var(--font-display);
-    font-size: 1.5rem;
+    font-size: 1.7rem;
     font-weight: 700;
     line-height: 1.1;
   }
 
   .count-options :global(.count-word) {
-    font-size: 0.8rem;
+    font-size: 0.95rem;
     color: var(--text-muted);
   }
 
@@ -1420,12 +1437,13 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
   .count-custom input {
     width: 5.5em;
     min-height: 44px;
-    padding: 8px 12px;
-    border: 1px solid var(--text-muted);
-    border-radius: 10px;
-    background: var(--surface);
+    padding: 6px 12px;
+    border: 2px solid var(--stroke);
+    border-radius: var(--sketch-sm);
+    background: none;
     color: var(--text);
     font: inherit;
+    font-size: 1.1rem;
   }
 
   .count-custom input:focus-visible {
@@ -1443,15 +1461,60 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
 
   .begin-button {
     justify-self: start;
+    justify-content: center;
     min-width: 160px;
     min-height: 48px;
-    border-radius: 99px;
-    font-size: 1rem;
+    font-size: 1.2rem;
   }
 
   /* ---------- phones ---------- */
 
   @media (max-width: 640px) {
+    /* Phones: title and timer share the first row, every tool fits on the second. */
+    .exam-header {
+      gap: 4px 12px;
+      padding-top: 8px;
+      padding-bottom: 4px;
+    }
+
+    .exam-title {
+      flex: 1 1 0;
+    }
+
+    .exam-title strong {
+      font-size: 1.1rem;
+    }
+
+    .timer {
+      min-width: 0;
+    }
+
+    .clock {
+      min-width: 3.4em;
+      font-size: 1.35rem;
+    }
+
+    .tools {
+      flex: 1 1 100%;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      gap: 2px;
+    }
+
+    .switch {
+      gap: 6px;
+      padding: 0 2px;
+      font-size: 0.95rem;
+    }
+
+    .switch-track {
+      width: 38px;
+    }
+
+    .switch[aria-checked='true'] .switch-thumb {
+      transform: translateX(14px);
+    }
+
     .tool-label {
       position: absolute;
       width: 1px;
@@ -1462,30 +1525,67 @@ const topicNames = Object.fromEntries(unit.topics.map((t) => [t.id, `${t.id} ${t
     }
 
     .tool {
-      min-width: 44px;
+      min-width: 40px;
+      padding: 4px;
     }
 
     .answered {
       display: none;
     }
 
+    /* The question menu opens centered over the whole footer, not over its
+       button, so it never runs off the left edge. */
+    .nav-wrap {
+      position: static;
+    }
+
+    /* The board's frame takes a few pixels from each side, so boxes keep their
+       padding tight to leave room for wide equations. */
+    .exam-main {
+      padding-left: max(12px, env(safe-area-inset-left, 0px));
+      padding-right: max(12px, env(safe-area-inset-right, 0px));
+    }
+
+    .feedback {
+      padding: 12px 12px 14px 14px;
+      font-size: 1rem;
+    }
+
+    .review-card {
+      padding: 14px 12px;
+    }
+
+    .solution-box {
+      padding: 10px 12px;
+    }
+
     .stem {
-      font-size: 1.02rem;
+      font-size: 1.1rem;
     }
 
     .choice {
-      gap: 12px;
-      padding: 11px 13px;
-    }
-
-    .choice:has(input:checked),
-    .choices .choice-row.is-correct .choice,
-    .choices .choice-row.is-wrong .choice {
-      padding: 10px 12px;
+      gap: 16px;
+      padding: 8px 10px 8px 12px;
+      font-size: 1.08rem;
     }
 
     .directions {
       top: 120px;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .tools {
+      gap: 0;
+    }
+
+    .tool {
+      min-width: 34px;
+      padding: 4px 2px;
+    }
+
+    .switch {
+      font-size: 0.85rem;
     }
   }
 

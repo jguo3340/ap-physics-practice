@@ -146,14 +146,13 @@ const minutes = Math.max(1, Math.round((questions.length * examFormat[0].minutes
 <style>
   .unit-hero {
     padding: 32px 0 28px;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 2px dashed var(--border);
   }
 
   .back {
     display: inline-block;
     margin-bottom: 20px;
-    font-size: 0.9rem;
-    font-weight: 600;
+    font-size: 1.05rem;
     text-decoration: none;
   }
 
@@ -169,14 +168,14 @@ const minutes = Math.max(1, Math.round((questions.length * examFormat[0].minutes
   }
 
   .unit-badge.big {
-    width: 3.25rem;
-    height: 3.25rem;
-    font-size: 1.5rem;
-    border-radius: var(--radius);
+    width: 3.4rem;
+    height: 3.2rem;
+    font-size: 1.7rem;
+    border-width: 3px;
   }
 
   .lead {
-    font-size: 1.08rem;
+    font-size: 1.15rem;
     max-width: 40em;
   }
 
@@ -188,13 +187,11 @@ const minutes = Math.max(1, Math.round((questions.length * examFormat[0].minutes
   }
 
   .jump a {
-    padding: 6px 14px;
-    border: 1px solid var(--border);
-    border-radius: 99px;
-    background: var(--surface);
+    padding: 3px 14px;
+    border: 2px solid var(--stroke);
+    border-radius: var(--sketch-sm);
     color: var(--text);
-    font-size: 0.9rem;
-    font-weight: 600;
+    font-size: 1.05rem;
     text-decoration: none;
   }
 
@@ -229,22 +226,22 @@ const minutes = Math.max(1, Math.round((questions.length * examFormat[0].minutes
 
   .practice-stats dt {
     font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 1.5rem;
+    font-weight: 700;
+    font-size: 1.7rem;
     line-height: 1.1;
+    color: var(--force-green);
   }
 
   .practice-stats dd {
     margin: 0;
-    font-size: 0.875rem;
-    color: var(--text-muted);
+    font-size: 0.95rem;
   }
 
   .topic-links {
     display: grid;
     gap: 8px;
-    margin-top: 20px;
-    font-size: 0.9rem;
+    margin-top: 24px;
+    font-size: 1rem;
   }
 
   .topic-links ul {
@@ -259,12 +256,10 @@ const minutes = Math.max(1, Math.round((questions.length * examFormat[0].minutes
   .topic-links a {
     display: inline-flex;
     gap: 8px;
-    padding: 6px 12px;
-    border: 1px solid var(--border);
-    border-radius: 99px;
-    background: var(--surface);
+    padding: 3px 12px;
+    border: 1.5px dashed var(--stroke);
+    border-radius: var(--sketch-sm);
     color: var(--text);
-    font-weight: 500;
     text-decoration: none;
   }
 
@@ -279,12 +274,12 @@ const minutes = Math.max(1, Math.round((questions.length * examFormat[0].minutes
 
   .status {
     display: inline-block;
-    padding: 3px 12px;
-    border-radius: 99px;
-    background: var(--highlight-soft);
+    padding: 0 12px;
+    border: 2px solid var(--highlight);
+    border-radius: var(--sketch-sm);
     color: var(--highlight);
-    font-size: 0.8rem;
-    font-weight: 700;
+    font-size: 1rem;
+    transform: rotate(-2deg);
   }
 
   .topics {
@@ -296,8 +291,9 @@ const minutes = Math.max(1, Math.round((questions.length * examFormat[0].minutes
   .topics li {
     display: flex;
     gap: 14px;
-    padding: 12px 0;
-    border-top: 1px solid var(--border);
+    padding: 10px 0;
+    border-top: 1.5px dashed var(--border);
+    font-size: 1.05rem;
   }
 
   .topics li:first-child {
@@ -307,8 +303,6 @@ const minutes = Math.max(1, Math.round((questions.length * examFormat[0].minutes
 
   .topic-id {
     min-width: 2.5em;
-    font-family: var(--font-mono);
-    font-weight: 700;
     color: var(--accent);
   }
 
@@ -322,10 +316,9 @@ const minutes = Math.max(1, Math.round((questions.length * examFormat[0].minutes
   .pager-link {
     display: grid;
     gap: 2px;
-    padding: 16px 20px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    background: var(--surface);
+    padding: 14px 20px;
+    border: 2px solid color-mix(in srgb, var(--stroke) 70%, transparent);
+    border-radius: var(--sketch);
     color: var(--text);
     text-decoration: none;
   }
@@ -336,7 +329,13 @@ const minutes = Math.max(1, Math.round((questions.length * examFormat[0].minutes
   }
 
   .pager-link span {
-    font-size: 0.85rem;
+    font-size: 0.95rem;
+  }
+
+  .pager-link strong {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    line-height: 1.15;
   }
 
   .pager-link.next {

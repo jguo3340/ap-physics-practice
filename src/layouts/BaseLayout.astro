@@ -22,6 +22,11 @@ const pageTitle = title ? `${title} | ${site.name}` : site.name;
 // Highlight the nav link for the section we're in.
 const path = Astro.url.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ''), '') || '/';
 const navLinks = [{ href: '/units', label: 'Units', active: path.startsWith('/units') }];
+
+// The last word of the site name is written in the second marker color.
+const nameWords = site.name.split(' ');
+const nameEnd = nameWords.pop();
+const nameStart = nameWords.join(' ');
 ---
 
 <!doctype html>
@@ -35,7 +40,7 @@ const navLinks = [{ href: '/units', label: 'Units', active: path.startsWith('/un
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@400;700&family=IBM+Plex+Mono:wght@500;600&family=Patrick+Hand&display=swap"
     />
     <title>{pageTitle}</title>
     <script is:inline>
@@ -45,7 +50,7 @@ const navLinks = [{ href: '/units', label: 'Units', active: path.startsWith('/un
       } catch {}
     </script>
   </head>
-  <body class:list={[bare ? 'bare' : 'graph-paper', { 'one-screen': oneScreen }]}>
+  <body class:list={[{ bare, 'one-screen': oneScreen }]}>
     {
       bare ? (
         <slot />
@@ -58,7 +63,9 @@ const navLinks = [{ href: '/units', label: 'Units', active: path.startsWith('/un
             <div class="container header-inner">
               <a class="brand" href={url('/')}>
                 <Logo />
-                <span>{site.name}</span>
+                <span>
+                  {nameStart} <b>{nameEnd}</b>
+                </span>
               </a>
               <div class="header-end">
                 <nav aria-label="Main">
@@ -66,7 +73,7 @@ const navLinks = [{ href: '/units', label: 'Units', active: path.startsWith('/un
                     {navLinks.map((link) => (
                       <li>
                         <a href={url(link.href)} aria-current={link.active ? 'page' : undefined}>
-                          {link.label}
+                          <span>{link.label}</span>
                         </a>
                       </li>
                     ))}
@@ -112,14 +119,18 @@ const navLinks = [{ href: '/units', label: 'Units', active: path.startsWith('/un
 
   .site-header {
     position: sticky;
-    top: 0;
+    top: var(--frame-w);
     z-index: 5;
-    background: color-mix(in srgb, var(--bg) 85%, transparent);
-    backdrop-filter: blur(8px);
+    background-color: var(--bg);
+    background-image: var(--board-image);
+    background-attachment: fixed;
   }
 
+  /* A marker line under the header, a little uneven like a hand-drawn one. */
   body:not(.one-screen) .site-header {
-    border-bottom: 1px solid var(--border);
+    border-bottom: 2px solid var(--border);
+    border-bottom-left-radius: 40% 3px;
+    border-bottom-right-radius: 60% 2px;
   }
 
   .header-inner {
@@ -136,10 +147,20 @@ const navLinks = [{ href: '/units', label: 'Units', active: path.startsWith('/un
     gap: 10px;
     color: var(--text);
     font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 1.12rem;
+    font-weight: 700;
+    font-size: 1.35rem;
+    line-height: 1;
     text-decoration: none;
     white-space: nowrap;
+  }
+
+  .brand b {
+    color: var(--highlight);
+    font-weight: 700;
+  }
+
+  .brand:hover {
+    color: var(--text);
   }
 
   .header-end {
@@ -158,22 +179,19 @@ const navLinks = [{ href: '/units', label: 'Units', active: path.startsWith('/un
 
   nav a {
     display: block;
-    padding: 6px 12px;
-    border-radius: var(--radius-sm);
-    color: var(--text-muted);
-    font-weight: 600;
-    font-size: 0.95rem;
+    padding: 4px 6px;
+    color: var(--text);
+    font-size: 1.1rem;
     text-decoration: none;
   }
 
-  nav a:hover {
-    color: var(--text);
-    background: var(--surface-2);
+  nav a span {
+    border-bottom: 2px dashed var(--accent);
   }
 
+  nav a:hover,
   nav a[aria-current='page'] {
     color: var(--accent);
-    background: var(--accent-soft);
   }
 
   /* On the narrowest phones the logo alone stands in for the site name. */
@@ -184,14 +202,13 @@ const navLinks = [{ href: '/units', label: 'Units', active: path.startsWith('/un
   }
 
   .site-footer {
-    padding: 20px 0;
-    font-size: 0.8rem;
+    padding: 18px 0 16px;
+    font-size: 0.85rem;
     color: var(--text-muted);
   }
 
   body:not(.one-screen) .site-footer {
-    border-top: 1px solid var(--border);
-    background: var(--bg);
+    border-top: 2px dashed var(--border);
   }
 
   .site-footer p {
@@ -206,6 +223,10 @@ const navLinks = [{ href: '/units', label: 'Units', active: path.startsWith('/un
     overflow: hidden;
   }
 
+  .one-screen .site-footer {
+    font-size: 0.8rem;
+  }
+
   .one-screen main {
     display: flex;
     align-items: center;
@@ -213,7 +234,7 @@ const navLinks = [{ href: '/units', label: 'Units', active: path.startsWith('/un
   }
 
   .one-screen .site-footer {
-    padding: 12px 0;
+    padding: 10px 0;
   }
 
   @media (max-width: 900px) {
