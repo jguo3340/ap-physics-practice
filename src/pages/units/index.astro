@@ -63,25 +63,33 @@ import { url } from '../../site';
     display: grid;
     grid-template-columns: auto 1fr auto;
     gap: 16px;
-    padding: 20px;
+    padding: 18px 20px;
     color: var(--text);
     text-decoration: none;
-    transition: border-color 0.15s;
+    transition:
+      border-color 0.15s,
+      transform 0.15s;
+  }
+
+  /* Every other box sits a hair crooked, like boxes drawn by hand. */
+  .unit-list li:nth-child(even) .unit-row {
+    border-radius: 14px 9px 16px 10px;
   }
 
   .unit-row:hover {
     border-color: var(--accent);
     color: var(--text);
+    transform: rotate(-0.4deg);
   }
 
   .unit-main h2 {
-    font-size: 1.15rem;
+    font-size: 1.4rem;
     margin-bottom: 4px;
   }
 
   .unit-main p {
     margin: 0 0 12px;
-    font-size: 0.93rem;
+    font-size: 1rem;
   }
 
   .topic-chips {
@@ -94,11 +102,11 @@ import { url } from '../../site';
   }
 
   .topic-chips li {
-    padding: 2px 10px;
-    border-radius: 99px;
-    background: var(--surface-2);
+    padding: 0 10px;
+    border: 1.5px dashed var(--border);
+    border-radius: var(--sketch-sm);
     color: var(--text-muted);
-    font-size: 0.8rem;
+    font-size: 0.9rem;
   }
 
   .unit-side {

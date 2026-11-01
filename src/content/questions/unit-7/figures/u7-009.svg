@@ -1,0 +1,21 @@
+<svg viewBox="0 0 360 232" role="img" aria-label="Graph of a quantity Q against position x from −A to +A. Q is largest at x = −A, falls in a straight line to zero at x = 0, and rises in a straight line to the same largest value at x = +A, making a V shape." xmlns="http://www.w3.org/2000/svg">
+  <g class="fig-grid">
+    <path d="M56 26V186M89.75 26V186M123.5 26V186M157.25 26V186M191 26V186M224.75 26V186M258.5 26V186M292.25 26V186M326 26V186" />
+    <path d="M56 186H326M56 159.333H326M56 132.667H326M56 106H326M56 79.3333H326M56 52.6667H326M56 26H326" />
+  </g>
+  <g class="fig-axis">
+    <path d="M56 186H336" />
+    <path d="M56 186V18" />
+  </g>
+  <g class="fig-label">
+    <text x="56" y="203" text-anchor="middle">−A</text>
+    <text x="191" y="203" text-anchor="middle">0</text>
+    <text x="326" y="203" text-anchor="middle">+A</text>
+    <text x="46" y="190" text-anchor="end">0</text>
+  </g>
+  <g class="fig-title">
+    <text x="191" y="225" text-anchor="middle">position, x</text>
+    <text x="14" y="106" text-anchor="middle" transform="rotate(-90 14 106)">Q</text>
+  </g>
+  <polyline class="fig-line" points="56.0,52.7 191.0,186.0 326.0,52.7" />
+</svg>

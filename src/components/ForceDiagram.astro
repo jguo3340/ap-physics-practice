@@ -1,0 +1,160 @@
+---
+// Free-body diagram of a block resting on a ramp: gravity, the normal force, and
+// static friction. Coordinates are worked out for a ramp angle of about 26.6°.
+// It is drawn straight onto the board, and a small noise filter makes the lines
+// wobble a little, like marker or chalk.
+---
+
+<figure class="figure">
+  <svg
+    viewBox="0 0 460 320"
+    role="img"
+    aria-label="Free-body diagram of a block resting on a ramp, with arrows for gravity, the normal force, and static friction"
+  >
+    <defs>
+      <filter id="hand-drawn">
+        <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="9"></feTurbulence>
+        <feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+      </filter>
+      <marker id="head-gravity" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M0 0 10 5 0 10" fill="none" stroke="var(--highlight)" stroke-width="2.2"></path>
+      </marker>
+      <marker id="head-normal" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M0 0 10 5 0 10" fill="none" stroke="var(--accent)" stroke-width="2.2"></path>
+      </marker>
+      <marker id="head-friction" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M0 0 10 5 0 10" fill="none" stroke="var(--force-green)" stroke-width="2.2"></path>
+      </marker>
+    </defs>
+
+    <g class="drawn" filter="url(#hand-drawn)">
+      <!-- ramp, shading lines, and its angle -->
+      <path d="M40 300 L420 300 L420 110 Z" stroke="var(--text)" stroke-width="3"></path>
+      <path
+        class="shading"
+        d="M140 300 L170 276 M200 300 L250 260 M260 300 L330 244 M320 300 L400 236 M380 300 L418 270"
+        stroke="var(--text)"
+        stroke-width="1.2"
+      ></path>
+      <path d="M92 300 A52 52 0 0 0 86.5 277" stroke="var(--text)" stroke-width="2"></path>
+
+      <!-- block, rotated to sit on the ramp -->
+      <rect x="214" y="145.5" width="70" height="50" stroke="var(--text)" stroke-width="3" transform="rotate(-26.57 249 195.5)"></rect>
+
+      <!-- force vectors from the block's center -->
+      <path class="vector" d="M237.8 173.1 L237.8 276" stroke="var(--highlight)" marker-end="url(#head-gravity)"></path>
+      <path class="vector second" d="M237.8 173.1 L198.5 94.5" stroke="var(--accent)" marker-end="url(#head-normal)"></path>
+      <path class="vector third" d="M237.8 173.1 L295 144.5" stroke="var(--force-green)" marker-end="url(#head-friction)"></path>
+    </g>
+    <circle cx="237.8" cy="173.1" r="4" fill="var(--text)"></circle>
+
+    <text x="100" y="292" class="small" fill="var(--text)">θ</text>
+    <text x="248" y="272" fill="var(--highlight)">F<tspan class="sub" dy="6">g</tspan></text>
+    <text x="160" y="96" fill="var(--accent)">F<tspan class="sub" dy="6">N</tspan></text>
+    <text x="302" y="140" fill="var(--force-green)">f<tspan class="sub" dy="6">s</tspan></text>
+    <text x="40" y="60" class="note" fill="var(--text)">ΣF = 0</text>
+    <text x="40" y="88" class="note-small" fill="var(--text-muted)">(at rest)</text>
+  </svg>
+  <figcaption>block at rest on a ramp</figcaption>
+</figure>
+
+<style>
+  .figure {
+    margin: 0;
+  }
+
+  svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 52vh;
+  }
+
+  .drawn {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .shading {
+    opacity: 0.3;
+  }
+
+  text {
+    font-family: var(--font-sans);
+    font-size: 28px;
+  }
+
+  .sub {
+    font-size: 17px;
+  }
+
+  .small {
+    font-size: 22px;
+  }
+
+  .note {
+    font-size: 24px;
+  }
+
+  .note-small {
+    font-size: 18px;
+  }
+
+  .vector {
+    stroke-width: 3.5;
+    stroke-dasharray: 160;
+    stroke-dashoffset: 160;
+    animation: draw 0.9s ease-out forwards;
+  }
+
+  .second {
+    animation-delay: 0.25s;
+  }
+
+  .third {
+    animation-delay: 0.5s;
+  }
+
+  @keyframes draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vector {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  figcaption {
+    padding-top: 4px;
+    font-size: 1.05rem;
+    text-align: center;
+    color: var(--accent);
+  }
+
+  @media (max-width: 900px) {
+    svg {
+      max-height: 28vh;
+    }
+  }
+
+  @media (max-width: 900px) and (max-height: 760px) {
+    svg {
+      max-height: 22vh;
+    }
+
+    figcaption {
+      display: none;
+    }
+  }
+
+  /* Very small phones: the text and buttons take the whole screen. */
+  @media (max-width: 900px) and (max-height: 600px) {
+    .figure {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,28 @@
+<svg viewBox="0 0 360 232" role="img" aria-label="Velocity-time graph from 0 to 10 seconds. The velocity is a constant 4 m/s from 0 to 2 s, decreases in a straight line to −4 m/s at 4 s (crossing zero at 3 s), stays at −4 m/s from 4 s to 8 s, then rises in a straight line to 0 at 10 s." xmlns="http://www.w3.org/2000/svg">
+  <g class="fig-grid">
+    <path d="M83 26V186M110 26V186M137 26V186M164 26V186M191 26V186M218 26V186M245 26V186M272 26V186M299 26V186M326 26V186" />
+    <path d="M56 26H326M56 42H326M56 58H326M56 74H326M56 90H326M56 122H326M56 138H326M56 154H326M56 170H326M56 186H326" />
+  </g>
+  <g class="fig-axis">
+    <path d="M56 106H336" />
+    <path d="M56 186V18" />
+  </g>
+  <g class="fig-label">
+    <text x="56" y="203" text-anchor="middle">0</text>
+    <text x="110" y="203" text-anchor="middle">2</text>
+    <text x="164" y="203" text-anchor="middle">4</text>
+    <text x="218" y="203" text-anchor="middle">6</text>
+    <text x="272" y="203" text-anchor="middle">8</text>
+    <text x="326" y="203" text-anchor="middle">10</text>
+    <text x="46" y="46" text-anchor="end">4</text>
+    <text x="46" y="78" text-anchor="end">2</text>
+    <text x="46" y="110" text-anchor="end">0</text>
+    <text x="46" y="142" text-anchor="end">−2</text>
+    <text x="46" y="174" text-anchor="end">−4</text>
+  </g>
+  <g class="fig-title">
+    <text x="192" y="225" text-anchor="middle">time, t (s)</text>
+    <text x="14" y="106" text-anchor="middle" transform="rotate(-90 14 106)">velocity, v (m/s)</text>
+  </g>
+  <polyline class="fig-line" points="56,42 110,42 164,170 272,170 326,106" />
+</svg>

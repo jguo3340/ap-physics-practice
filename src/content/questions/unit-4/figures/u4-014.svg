@@ -1,0 +1,30 @@
+<svg viewBox="0 0 360 232" role="img" aria-label="Force-time graph of the bat on the ball. The force rises in a straight line from 0 at t = 0 to 1200 N at 5 ms, then falls in a straight line back to 0 at 10 ms." xmlns="http://www.w3.org/2000/svg">
+  <g class="fig-grid">
+    <path d="M56 26V186M78.5 26V186M101 26V186M123.5 26V186M146 26V186M168.5 26V186M191 26V186M213.5 26V186M236 26V186M258.5 26V186M281 26V186M303.5 26V186M326 26V186" />
+    <path d="M56 186H326M56 170H326M56 154H326M56 138H326M56 122H326M56 106H326M56 90H326M56 74H326M56 58H326M56 42H326M56 26H326" />
+  </g>
+  <g class="fig-axis">
+    <path d="M56 186H336" />
+    <path d="M56 186V18" />
+  </g>
+  <g class="fig-label">
+    <text x="56" y="203" text-anchor="middle">0</text>
+    <text x="101" y="203" text-anchor="middle">2</text>
+    <text x="146" y="203" text-anchor="middle">4</text>
+    <text x="191" y="203" text-anchor="middle">6</text>
+    <text x="236" y="203" text-anchor="middle">8</text>
+    <text x="281" y="203" text-anchor="middle">10</text>
+    <text x="326" y="203" text-anchor="middle">12</text>
+    <text x="46" y="190" text-anchor="end">0</text>
+    <text x="46" y="158" text-anchor="end">300</text>
+    <text x="46" y="126" text-anchor="end">600</text>
+    <text x="46" y="94" text-anchor="end">900</text>
+    <text x="46" y="62" text-anchor="end">1200</text>
+    <text x="46" y="30" text-anchor="end">1500</text>
+  </g>
+  <g class="fig-title">
+    <text x="191" y="225" text-anchor="middle">time, t (ms)</text>
+    <text x="14" y="106" text-anchor="middle" transform="rotate(-90 14 106)">force, F (N)</text>
+  </g>
+  <polyline class="fig-line" points="56,186 168.5,58 281,186" />
+</svg>

@@ -1,0 +1,31 @@
+<svg viewBox="0 0 360 232" role="img" aria-label="Position-time graph. The position starts at 0 at t = 0, rises along a curve that gets less steep to a highest point of 8 m at t = 2 s, then falls back along the mirror-image curve to 0 at t = 4 s. Points are marked at t = 1 s and t = 3 s, both at 6 m." xmlns="http://www.w3.org/2000/svg">
+  <g class="fig-grid">
+    <path d="M90 26V186M124 26V186M158 26V186M192 26V186M226 26V186M260 26V186M294 26V186M328 26V186" />
+    <path d="M56 166H328M56 146H328M56 126H328M56 106H328M56 86H328M56 66H328M56 46H328M56 26H328" />
+  </g>
+  <g class="fig-axis">
+    <path d="M56 186H336" />
+    <path d="M56 186V18" />
+  </g>
+  <g class="fig-label">
+    <text x="56" y="203" text-anchor="middle">0</text>
+    <text x="124" y="203" text-anchor="middle">1</text>
+    <text x="192" y="203" text-anchor="middle">2</text>
+    <text x="260" y="203" text-anchor="middle">3</text>
+    <text x="328" y="203" text-anchor="middle">4</text>
+    <text x="46" y="190" text-anchor="end">0</text>
+    <text x="46" y="150" text-anchor="end">2</text>
+    <text x="46" y="110" text-anchor="end">4</text>
+    <text x="46" y="70" text-anchor="end">6</text>
+    <text x="46" y="30" text-anchor="end">8</text>
+  </g>
+  <g class="fig-title">
+    <text x="192" y="225" text-anchor="middle">time, t (s)</text>
+    <text x="14" y="106" text-anchor="middle" transform="rotate(-90 14 106)">position, x (m)</text>
+  </g>
+  <path class="fig-line" d="M56 186Q192 -134 328 186" />
+  <g class="fig-point">
+    <circle cx="124" cy="66" r="3.5" />
+    <circle cx="260" cy="66" r="3.5" />
+  </g>
+</svg>

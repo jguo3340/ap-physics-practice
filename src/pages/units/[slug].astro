@@ -2,7 +2,8 @@
 // One page per unit. Astro builds all 8 pages ahead of time from units.ts.
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import WeightBar from '../../components/WeightBar.astro';
-import { units, type Unit } from '../../data/units';
+import { examFormat, units, type Unit } from '../../data/units';
+import { getUnitQuestions } from '../../lib/questions';
 import { url } from '../../site';
 
 export function getStaticPaths() {
@@ -17,6 +18,10 @@ const { unit } = Astro.props;
 const index = units.findIndex((u) => u.slug === unit.slug);
 const previous = units[index - 1];
 const next = units[index + 1];
+const questions = await getUnitQuestions(unit.number);
+const practiceUrl = url(`/units/${unit.slug}/practice`);
+const practiceTopics = unit.topics.filter((t) => questions.some((q) => q.topic === t.id));
+const minutes = Math.max(1, Math.round((questions.length * examFormat[0].minutes) / examFormat[0].questions));
 ---
 
 <BaseLayout title={`Unit ${unit.number}: ${unit.title}`} description={unit.summary}>
@@ -25,10 +30,7 @@ const next = units[index + 1];
       <a class="back" href={url('/units')}>← All units</a>
       <div class="title-row">
         <span class="unit-badge big">{unit.number}</span>
-        <div>
-          <p class="eyebrow">Unit {unit.number}</p>
-          <h1>{unit.title}</h1>
-        </div>
+        <h1>{unit.title}</h1>
       </div>
       <p class="lead muted">{unit.summary}</p>
       <WeightBar weight={unit.examWeight} />
@@ -44,11 +46,56 @@ const next = units[index + 1];
   <div class="container unit-body">
     <section id="practice" class="panel card">
       <h2>Practice questions</h2>
-      <p class="muted">
-        Practice for this unit is on the way. You'll be able to answer AP-style multiple-choice
-        questions for the whole unit or one topic at a time, with an explanation after each answer.
-      </p>
-      <span class="status">Coming soon</span>
+      {
+        questions.length > 0 ? (
+          <>
+            <p class="muted">
+              Exam-style multiple choice for this unit, on its own page, with a timer and a worked solution for
+              every question. Do the whole set or pick how many questions you want each time.
+            </p>
+            <dl class="practice-stats">
+              <div>
+                <dt>{questions.length}</dt>
+                <dd>questions</dd>
+              </div>
+              <div>
+                <dt>
+                  {practiceTopics.length} of {unit.topics.length}
+                </dt>
+                <dd>topics covered</dd>
+              </div>
+              <div>
+                <dt>~{minutes} min</dt>
+                <dd>for all, at exam pace</dd>
+              </div>
+            </dl>
+            <a class="button button-primary" href={practiceUrl}>
+              Start practice →
+            </a>
+            <div class="topic-links">
+              <span class="muted">Or practice one topic:</span>
+              <ul>
+                {practiceTopics.map((t) => (
+                  <li>
+                    <a href={`${practiceUrl}#topic-${t.id}`}>
+                      <span class="topic-id">{t.id}</span> {t.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </>
+        ) : (
+          <>
+            <p class="muted">
+              Practice for this unit is on the way. You'll be able to answer AP-style multiple-choice
+              questions for the whole unit or one topic at a time, with an explanation after each
+              answer.
+            </p>
+            <span class="status">Coming soon</span>
+          </>
+        )
+      }
     </section>
 
     <section id="cheat-sheet" class="panel card">
@@ -99,17 +146,13 @@ const next = units[index + 1];
 <style>
   .unit-hero {
     padding: 32px 0 28px;
-    border-bottom: 1px solid var(--border);
-    background:
-      radial-gradient(circle at 90% 0%, var(--accent-soft), transparent 50%),
-      var(--bg);
+    border-bottom: 2px dashed var(--border);
   }
 
   .back {
     display: inline-block;
     margin-bottom: 20px;
-    font-size: 0.9rem;
-    font-weight: 600;
+    font-size: 1.05rem;
     text-decoration: none;
   }
 
@@ -120,23 +163,19 @@ const next = units[index + 1];
     margin-bottom: 8px;
   }
 
-  .title-row .eyebrow {
-    margin-bottom: 0.25em;
-  }
-
   .title-row h1 {
     margin: 0;
   }
 
   .unit-badge.big {
-    width: 3.25rem;
-    height: 3.25rem;
-    font-size: 1.5rem;
-    border-radius: var(--radius);
+    width: 3.4rem;
+    height: 3.2rem;
+    font-size: 1.7rem;
+    border-width: 3px;
   }
 
   .lead {
-    font-size: 1.08rem;
+    font-size: 1.15rem;
     max-width: 40em;
   }
 
@@ -148,13 +187,11 @@ const next = units[index + 1];
   }
 
   .jump a {
-    padding: 6px 14px;
-    border: 1px solid var(--border);
-    border-radius: 99px;
-    background: var(--surface);
+    padding: 3px 14px;
+    border: 2px solid var(--stroke);
+    border-radius: var(--sketch-sm);
     color: var(--text);
-    font-size: 0.9rem;
-    font-weight: 600;
+    font-size: 1.05rem;
     text-decoration: none;
   }
 
@@ -171,6 +208,7 @@ const next = units[index + 1];
   }
 
   .panel {
+    min-width: 0;
     padding: 24px;
     scroll-margin-top: 76px;
   }
@@ -179,14 +217,69 @@ const next = units[index + 1];
     max-width: 44em;
   }
 
+  .practice-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 32px;
+    margin: 4px 0 20px;
+  }
+
+  .practice-stats dt {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.7rem;
+    line-height: 1.1;
+    color: var(--force-green);
+  }
+
+  .practice-stats dd {
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  .topic-links {
+    display: grid;
+    gap: 8px;
+    margin-top: 24px;
+    font-size: 1rem;
+  }
+
+  .topic-links ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .topic-links a {
+    display: inline-flex;
+    gap: 8px;
+    padding: 3px 12px;
+    border: 1.5px dashed var(--stroke);
+    border-radius: var(--sketch-sm);
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .topic-links a:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .topic-links .topic-id {
+    min-width: 0;
+  }
+
   .status {
     display: inline-block;
-    padding: 3px 12px;
-    border-radius: 99px;
-    background: var(--highlight-soft);
+    padding: 0 12px;
+    border: 2px solid var(--highlight);
+    border-radius: var(--sketch-sm);
     color: var(--highlight);
-    font-size: 0.8rem;
-    font-weight: 700;
+    font-size: 1rem;
+    transform: rotate(-2deg);
   }
 
   .topics {
@@ -198,8 +291,9 @@ const next = units[index + 1];
   .topics li {
     display: flex;
     gap: 14px;
-    padding: 12px 0;
-    border-top: 1px solid var(--border);
+    padding: 10px 0;
+    border-top: 1.5px dashed var(--border);
+    font-size: 1.05rem;
   }
 
   .topics li:first-child {
@@ -209,8 +303,6 @@ const next = units[index + 1];
 
   .topic-id {
     min-width: 2.5em;
-    font-family: var(--font-mono);
-    font-weight: 700;
     color: var(--accent);
   }
 
@@ -224,10 +316,9 @@ const next = units[index + 1];
   .pager-link {
     display: grid;
     gap: 2px;
-    padding: 16px 20px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    background: var(--surface);
+    padding: 14px 20px;
+    border: 2px solid color-mix(in srgb, var(--stroke) 70%, transparent);
+    border-radius: var(--sketch);
     color: var(--text);
     text-decoration: none;
   }
@@ -238,7 +329,13 @@ const next = units[index + 1];
   }
 
   .pager-link span {
-    font-size: 0.85rem;
+    font-size: 0.95rem;
+  }
+
+  .pager-link strong {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    line-height: 1.15;
   }
 
   .pager-link.next {
@@ -247,6 +344,10 @@ const next = units[index + 1];
   }
 
   @media (max-width: 600px) {
+    .panel {
+      padding: 20px 16px;
+    }
+
     .pager {
       grid-template-columns: 1fr;
     }

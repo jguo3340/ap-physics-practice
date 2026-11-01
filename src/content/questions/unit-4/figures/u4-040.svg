@@ -1,0 +1,32 @@
+<svg viewBox="0 0 360 232" role="img" aria-label="Force against time. The force is +3 N from 0 to 12 s, then jumps to −8 N and stays there from 12 s to 18 s, then returns to 0." xmlns="http://www.w3.org/2000/svg">
+  <g class="fig-grid">
+    <path d="M56 26V186M69.5 26V186M83 26V186M96.5 26V186M110 26V186M123.5 26V186M137 26V186M150.5 26V186M164 26V186M177.5 26V186M191 26V186M204.5 26V186M218 26V186M231.5 26V186M245 26V186M258.5 26V186M272 26V186M285.5 26V186M299 26V186M312.5 26V186M326 26V186" />
+    <path d="M56 186H326M56 176H326M56 166H326M56 156H326M56 146H326M56 136H326M56 126H326M56 116H326M56 106H326M56 96H326M56 76H326M56 66H326M56 56H326M56 46H326M56 36H326M56 26H326" />
+  </g>
+  <g class="fig-axis">
+    <path d="M56 86H336" />
+    <path d="M56 186V18" />
+  </g>
+  <g class="fig-label">
+    <text x="56" y="203" text-anchor="middle">0</text>
+    <text x="110" y="203" text-anchor="middle">4</text>
+    <text x="164" y="203" text-anchor="middle">8</text>
+    <text x="218" y="203" text-anchor="middle">12</text>
+    <text x="272" y="203" text-anchor="middle">16</text>
+    <text x="326" y="203" text-anchor="middle">20</text>
+    <text x="46" y="190" text-anchor="end">−10</text>
+    <text x="46" y="170" text-anchor="end">−8</text>
+    <text x="46" y="150" text-anchor="end">−6</text>
+    <text x="46" y="130" text-anchor="end">−4</text>
+    <text x="46" y="110" text-anchor="end">−2</text>
+    <text x="46" y="90" text-anchor="end">0</text>
+    <text x="46" y="70" text-anchor="end">2</text>
+    <text x="46" y="50" text-anchor="end">4</text>
+    <text x="46" y="30" text-anchor="end">6</text>
+  </g>
+  <g class="fig-title">
+    <text x="191" y="225" text-anchor="middle">time, t (s)</text>
+    <text x="14" y="106" text-anchor="middle" transform="rotate(-90 14 106)">force, F (N)</text>
+  </g>
+  <polyline class="fig-line" points="56.0,86.0 56.0,56.0 218.0,56.0 218.0,166.0 299.0,166.0 299.0,86.0" />
+</svg>

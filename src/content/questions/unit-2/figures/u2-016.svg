@@ -1,0 +1,11 @@
+<svg viewBox="0 20 360 186" role="img" aria-label="A ball on a string moving in a vertical circle. The ball is at the left side of the circle, level with the center, with the string horizontal. An arrow shows the ball moving straight up." xmlns="http://www.w3.org/2000/svg">
+  <circle class="fig-dash" cx="180" cy="112" r="78" />
+  <path class="fig-axis" d="M111 112H180" />
+  <circle class="fig-point" style="fill:var(--text, #1b2433)" cx="180" cy="112" r="3" />
+  <circle class="fig-fill" cx="102" cy="112" r="9" />
+  <path class="fig-line" style="stroke-width:2" d="M80 108V66" />
+  <path class="fig-point" d="M80 56L74.5 67H85.5Z" />
+  <text class="fig-label" x="72" y="86" text-anchor="end">motion</text>
+  <text class="fig-label" x="188" y="128">center</text>
+  <text class="fig-label" x="141" y="104" text-anchor="middle">string</text>
+</svg>

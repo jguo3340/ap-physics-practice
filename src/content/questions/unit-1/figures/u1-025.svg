@@ -1,0 +1,45 @@
+<svg viewBox="0 0 360 232" role="img" aria-label="Velocity data, one point each second from 0 to 12 s. The velocity is 2 m/s at t = 0 and drops by 0.5 m/s each second to 0 at 4 s. It is −1 m/s at 5 s and −2 m/s at 6 s, then stays at −2 m/s through 12 s." xmlns="http://www.w3.org/2000/svg">
+  <g class="fig-grid">
+    <path d="M56 26V186M78.5 26V186M101 26V186M123.5 26V186M146 26V186M168.5 26V186M191 26V186M213.5 26V186M236 26V186M258.5 26V186M281 26V186M303.5 26V186M326 26V186" />
+    <path d="M56 186H326M56 172.667H326M56 159.333H326M56 146H326M56 132.667H326M56 119.333H326M56 92.6667H326M56 79.3333H326M56 66H326M56 52.6667H326M56 39.3333H326M56 26H326" />
+  </g>
+  <g class="fig-axis">
+    <path d="M56 106H336" />
+    <path d="M56 186V18" />
+  </g>
+  <g class="fig-label">
+    <text x="56" y="203" text-anchor="middle">0</text>
+    <text x="101" y="203" text-anchor="middle">2</text>
+    <text x="146" y="203" text-anchor="middle">4</text>
+    <text x="191" y="203" text-anchor="middle">6</text>
+    <text x="236" y="203" text-anchor="middle">8</text>
+    <text x="281" y="203" text-anchor="middle">10</text>
+    <text x="326" y="203" text-anchor="middle">12</text>
+    <text x="46" y="190" text-anchor="end">−3</text>
+    <text x="46" y="163.333" text-anchor="end">−2</text>
+    <text x="46" y="136.667" text-anchor="end">−1</text>
+    <text x="46" y="110" text-anchor="end">0</text>
+    <text x="46" y="83.3333" text-anchor="end">1</text>
+    <text x="46" y="56.6667" text-anchor="end">2</text>
+    <text x="46" y="30" text-anchor="end">3</text>
+  </g>
+  <g class="fig-title">
+    <text x="191" y="225" text-anchor="middle">time, t (s)</text>
+    <text x="14" y="106" text-anchor="middle" transform="rotate(-90 14 106)">velocity, v (m/s)</text>
+  </g>
+  <g class="fig-point">
+    <circle cx="56.0" cy="52.7" r="3.5" />
+    <circle cx="78.5" cy="66.0" r="3.5" />
+    <circle cx="101.0" cy="79.3" r="3.5" />
+    <circle cx="123.5" cy="92.7" r="3.5" />
+    <circle cx="146.0" cy="106.0" r="3.5" />
+    <circle cx="168.5" cy="132.7" r="3.5" />
+    <circle cx="191.0" cy="159.3" r="3.5" />
+    <circle cx="213.5" cy="159.3" r="3.5" />
+    <circle cx="236.0" cy="159.3" r="3.5" />
+    <circle cx="258.5" cy="159.3" r="3.5" />
+    <circle cx="281.0" cy="159.3" r="3.5" />
+    <circle cx="303.5" cy="159.3" r="3.5" />
+    <circle cx="326.0" cy="159.3" r="3.5" />
+  </g>
+</svg>

@@ -11,7 +11,11 @@
     "check": "astro check"
   },
   "dependencies": {
-    "astro": "^7.4.2"
+    "@astrojs/markdown-remark": "^7.3.4",
+    "astro": "^7.4.2",
+    "katex": "^0.16.47",
+    "rehype-katex": "^7.0.1",
+    "remark-math": "^6.0.0"
   },
   "engines": {
     "node": ">=22.23.4"

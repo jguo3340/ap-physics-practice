@@ -1,0 +1,31 @@
+<svg viewBox="0 0 360 232" role="img" aria-label="Velocity-time graph for two carts from 0 to 5 s. Cart 1 (solid line) starts at 3 m/s and curves smoothly down to 2 m/s at 5 s, passing 2.5 m/s at 2.5 s. Cart 2 (dashed line) starts at 1 m/s and curves smoothly up to 2 m/s at 5 s, passing 1.5 m/s at 2.5 s. The two curves are mirror images about 2 m/s." xmlns="http://www.w3.org/2000/svg">
+  <g class="fig-grid">
+    <path d="M56 26V186M83 26V186M110 26V186M137 26V186M164 26V186M191 26V186M218 26V186M245 26V186M272 26V186M299 26V186M326 26V186" />
+    <path d="M56 186H326M56 166H326M56 146H326M56 126H326M56 106H326M56 86H326M56 66H326M56 46H326M56 26H326" />
+  </g>
+  <g class="fig-axis">
+    <path d="M56 186H336" />
+    <path d="M56 186V18" />
+  </g>
+  <g class="fig-label">
+    <text x="56" y="203" text-anchor="middle">0</text>
+    <text x="110" y="203" text-anchor="middle">1</text>
+    <text x="164" y="203" text-anchor="middle">2</text>
+    <text x="218" y="203" text-anchor="middle">3</text>
+    <text x="272" y="203" text-anchor="middle">4</text>
+    <text x="326" y="203" text-anchor="middle">5</text>
+    <text x="46" y="190" text-anchor="end">0</text>
+    <text x="46" y="150" text-anchor="end">1</text>
+    <text x="46" y="110" text-anchor="end">2</text>
+    <text x="46" y="70" text-anchor="end">3</text>
+    <text x="46" y="30" text-anchor="end">4</text>
+  </g>
+  <g class="fig-title">
+    <text x="191" y="225" text-anchor="middle">time, t (s)</text>
+    <text x="14" y="106" text-anchor="middle" transform="rotate(-90 14 106)">velocity, v (m/s)</text>
+  </g>
+  <polyline class="fig-line" points="56.0,66.0 61.4,66.0 66.8,66.2 72.2,66.4 77.6,66.6 83.0,67.0 88.4,67.4 93.8,67.9 99.2,68.5 104.6,69.1 110.0,69.8 115.4,70.6 120.8,71.4 126.2,72.3 131.6,73.3 137.0,74.2 142.4,75.3 147.8,76.4 153.2,77.5 158.6,78.6 164.0,79.8 169.4,81.0 174.8,82.3 180.2,83.5 185.6,84.7 191.0,86.0 196.4,87.3 201.8,88.5 207.2,89.7 212.6,91.0 218.0,92.2 223.4,93.4 228.8,94.5 234.2,95.6 239.6,96.7 245.0,97.8 250.4,98.7 255.8,99.7 261.2,100.6 266.6,101.4 272.0,102.2 277.4,102.9 282.8,103.5 288.2,104.1 293.6,104.6 299.0,105.0 304.4,105.4 309.8,105.6 315.2,105.8 320.6,106.0 326.0,106.0" />
+  <polyline class="fig-line" style="stroke-dasharray:9 6" points="56.0,146.0 61.4,146.0 66.8,145.8 72.2,145.6 77.6,145.4 83.0,145.0 88.4,144.6 93.8,144.1 99.2,143.5 104.6,142.9 110.0,142.2 115.4,141.4 120.8,140.6 126.2,139.7 131.6,138.7 137.0,137.8 142.4,136.7 147.8,135.6 153.2,134.5 158.6,133.4 164.0,132.2 169.4,131.0 174.8,129.7 180.2,128.5 185.6,127.3 191.0,126.0 196.4,124.7 201.8,123.5 207.2,122.3 212.6,121.0 218.0,119.8 223.4,118.6 228.8,117.5 234.2,116.4 239.6,115.3 245.0,114.2 250.4,113.3 255.8,112.3 261.2,111.4 266.6,110.6 272.0,109.8 277.4,109.1 282.8,108.5 288.2,107.9 293.6,107.4 299.0,107.0 304.4,106.6 309.8,106.4 315.2,106.2 320.6,106.0 326.0,106.0" />
+  <text class="fig-title" x="64.1" y="58">cart 1</text>
+  <text class="fig-title" x="64.1" y="160">cart 2</text>
+</svg>
